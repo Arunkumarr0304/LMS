@@ -8,6 +8,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { useState } from 'react';
+import { useRouter } from 'expo-router';
 import BackIcon from '../../assets/images/back.svg';
 import StarIcon from '../../assets/images/star.svg';
 import SavedIcon from '../../assets/images/saved.svg';
@@ -36,11 +37,11 @@ const wishlistCourses = [
 ];
 
 export default function WishlistScreen() {
+  const router = useRouter();
   const [courses, setCourses] = useState(wishlistCourses);
 
-  const handleEnroll = (courseId: string) => {
-    // Handle enroll action
-    console.log('Enrolling in course:', courseId);
+  const handleEnroll = (course: typeof wishlistCourses[0]) => {
+    router.push(`/course-details?id=${course.id}&title=${encodeURIComponent(course.title)}&instructor=${encodeURIComponent(course.instructor)}&rating=${course.rating}&students=12000&duration=${encodeURIComponent(course.duration)}&price=${course.price}` as any);
   };
 
   const renderHeader = () => (
@@ -97,7 +98,7 @@ export default function WishlistScreen() {
       
       <TouchableOpacity 
         style={styles.enrollButton}
-        onPress={() => handleEnroll(course.id)}
+        onPress={() => handleEnroll(course)}
       >
         <ThemedText style={styles.enrollButtonText} weight="semiBold">
           Enroll Now

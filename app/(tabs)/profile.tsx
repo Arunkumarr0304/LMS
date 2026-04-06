@@ -13,6 +13,7 @@ import EditIcon from '../../assets/images/edit-icon.svg';
 import MyCourseIcon from '../../assets/images/my-course.svg';
 import CertificateIcon from '../../assets/images/certificate.svg';
 import PaymentIcon from '../../assets/images/payment.svg';
+import HelpIcon from '../../assets/images/help.svg';
 import SettingsIcon from '../../assets/images/settings.svg';
 import LogoutIcon from '../../assets/images/logout.svg';
 
@@ -22,18 +23,25 @@ const stats = [
   { value: '48h', label: 'Learning', color: '#F59E0B' },
 ];
 
-const menuItems = [
-  { id: '1', label: 'My Courses', icon: MyCourseIcon },
-  { id: '2', label: 'Certificates', icon: CertificateIcon },
-  { id: '3', label: 'Payment History', icon: PaymentIcon },
-  { id: '4', label: 'Settings', icon: SettingsIcon },
+  const menuItems = [
+  { id: '1', label: 'My Courses', icon: MyCourseIcon, route: '/my-courses' },
+  { id: '2', label: 'Certificates', icon: CertificateIcon, route: '/certificates' },
+  { id: '3', label: 'Payment History', icon: PaymentIcon, route: '/payment-history' },
+  { id: '4', label: 'Help Center', icon: HelpIcon, route: '/help-center' },
+  { id: '5', label: 'Settings', icon: SettingsIcon, route: '/settings' },
 ];
 
 export default function ProfileScreen() {
   const router = useRouter();
 
   const handleLogout = () => {
-    router.replace('/login');
+    router.replace('/(auth)/login');
+  };
+
+  const handleMenuPress = (route: string | null) => {
+    if (route) {
+      router.push(route as any);
+    }
   };
 
   const renderHeader = () => (
@@ -101,6 +109,7 @@ export default function ProfileScreen() {
           styles.menuItem,
           index === menuItems.length - 1 && styles.lastMenuItem,
         ]}
+        onPress={() => handleMenuPress(item.route)}
       >
         <View style={styles.menuItemLeft}>
           <IconComponent width={20} height={20} />

@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { useState } from 'react';
+import { useRouter } from 'expo-router';
 import SearchIcon from '../../assets/images/search.svg';
 import NotificationIcon from '../../assets/images/notification.svg';
 import StarIcon from '../../assets/images/star.svg';
@@ -103,6 +104,11 @@ const popularCourses = [
 
 export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const router = useRouter();
+
+  const handleNotificationPress = () => {
+    router.push('/notifications');
+  };
 
   const renderHeader = () => (
     <View style={styles.header}>
@@ -115,7 +121,7 @@ export default function HomeScreen() {
           <ThemedText style={styles.userName} weight="bold">John Doe</ThemedText>
         </View>
       </View>
-      <TouchableOpacity style={styles.notificationButton}>
+      <TouchableOpacity style={styles.notificationButton} onPress={handleNotificationPress}>
         <NotificationIcon width={24} height={24} />
         <View style={styles.notificationDot} />
       </TouchableOpacity>
@@ -167,6 +173,14 @@ export default function HomeScreen() {
     </View>
   );
 
+  const handleCoursePress = (course: typeof popularCourses[0]) => {
+    router.push(`/course-details?id=${course.id}&title=${encodeURIComponent(course.title)}&instructor=${encodeURIComponent(course.instructor)}&rating=${course.rating}&students=${course.students}&duration=${encodeURIComponent(course.duration)}&price=${course.price}` as any);
+  };
+
+  const handleContinueLearningPress = (course: typeof continueLearningCourses[0]) => {
+    router.push(`/course-details?id=${course.id}&title=${encodeURIComponent(course.title)}&instructor=${encodeURIComponent(course.instructor || 'Unknown')}&rating=${course.rating}&students=12000&duration=${encodeURIComponent(course.duration)}&price=49.99` as any);
+  };
+
   const renderContinueLearning = () => (
     <View style={styles.sectionContainer}>
       <View style={styles.sectionHeader}>
@@ -182,7 +196,12 @@ export default function HomeScreen() {
         contentContainerStyle={styles.continueLearningScroll}
       >
         {continueLearningCourses.map((course) => (
-          <View key={course.id} style={styles.continueCard}>
+          <TouchableOpacity 
+            key={course.id} 
+            style={styles.continueCard}
+            onPress={() => handleContinueLearningPress(course)}
+            activeOpacity={0.8}
+          >
             <View style={styles.continueImageContainer}>
               <Image source={course.image} style={styles.continueImage} />
               <TouchableOpacity style={styles.saveButton}>
@@ -218,7 +237,7 @@ export default function HomeScreen() {
                 {course.progress}%
               </ThemedText>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </View>
@@ -235,12 +254,14 @@ export default function HomeScreen() {
       </View>
       <View style={styles.popularList}>
         {popularCourses.map((course, index) => (
-          <View
+          <TouchableOpacity
             key={course.id}
             style={[
               styles.popularCard,
               index === popularCourses.length - 1 && styles.lastCard,
             ]}
+            onPress={() => handleCoursePress(course)}
+            activeOpacity={0.8}
           >
             <Image source={course.image} style={styles.popularImage} />
             <View style={styles.popularContent}>
@@ -270,7 +291,12 @@ export default function HomeScreen() {
                 <ThemedText style={styles.price} weight="bold">
                   ${course.price}
                 </ThemedText>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    // Handle save toggle
+                  }}
+                >
                   {course.isSaved ? (
                     <SavedIcon width={20} height={20} />
                   ) : (
@@ -279,7 +305,7 @@ export default function HomeScreen() {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     </View>

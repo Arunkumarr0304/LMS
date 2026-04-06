@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { useState } from 'react';
+import { useRouter } from 'expo-router';
 import BackIcon from '../../assets/images/back.svg';
 import SearchIcon from '../../assets/images/search.svg';
 import FilterIcon from '../../assets/images/filter-icon.svg';
@@ -68,7 +69,12 @@ const recentSearchCourses = [
 ];
 
 export default function ExploreScreen() {
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const handleCoursePress = (course: typeof recentSearchCourses[0]) => {
+    router.push(`/course-details?id=${course.id}&title=${encodeURIComponent(course.title)}&instructor=${encodeURIComponent(course.instructor)}&rating=${course.rating}&students=${course.students}&duration=${encodeURIComponent(course.duration)}&price=${course.price}` as any);
+  };
 
   const renderHeader = () => (
     <View style={styles.header}>
@@ -139,12 +145,14 @@ export default function ExploreScreen() {
       </View>
       <View style={styles.coursesList}>
         {recentSearchCourses.map((course, index) => (
-          <View
+          <TouchableOpacity
             key={course.id}
             style={[
               styles.courseCard,
               index === recentSearchCourses.length - 1 && styles.lastCard,
             ]}
+            onPress={() => handleCoursePress(course)}
+            activeOpacity={0.8}
           >
             <Image source={course.image} style={styles.courseImage} />
             <View style={styles.courseContent}>
@@ -172,7 +180,12 @@ export default function ExploreScreen() {
                 <ThemedText style={styles.price} weight="bold">
                   ${course.price}
                 </ThemedText>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    // Handle save toggle
+                  }}
+                >
                   {course.isSaved ? (
                     <SavedIcon width={20} height={20} />
                   ) : (
@@ -181,7 +194,7 @@ export default function ExploreScreen() {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     </View>

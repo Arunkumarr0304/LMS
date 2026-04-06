@@ -5,70 +5,85 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Text,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { useState } from 'react';
+import { useRouter } from 'expo-router';
 import BackIcon from '../../assets/images/back.svg';
 import SearchIcon from '../../assets/images/search.svg';
 import FilterIcon from '../../assets/images/filter-icon.svg';
 import StarIcon from '../../assets/images/star.svg';
 import SavedIcon from '../../assets/images/saved.svg';
-import UnsavedIcon from '../../assets/images/unsaved.svg';
 import SeeArrowIcon from '../../assets/images/see-arrow.svg';
 
 const categories = ['All', 'Design', 'Programming', 'Marketing'];
 
-const recentSearchCourses = [
+const categoryImages = [
+  { image: require('../../assets/images/categories-img1.png') },
+  { image: require('../../assets/images/categories-img2.png') },
+  { image: require('../../assets/images/categories-img3.png') },
+  { image: require('../../assets/images/categories-img4.png') },
+];
+
+const myLearningCourses = [
   {
     id: '1',
-    title: 'Advanced Python Programming',
-    instructor: 'David Miller',
-    rating: 4.9,
-    duration: '15h 00m',
-    students: 18500,
-    price: 49.99,
-    image: require('../../assets/images/popular-course5.png'),
+    title: 'Python for Data Science',
+    instructor: 'Dr. Mike Ross',
+    rating: 4.8,
+    duration: '28h',
+    image: require('../../assets/images/categories-img1.png'),
     isSaved: true,
+    progress: 65,
+    lessonsCompleted: 18,
+    totalLessons: 28,
   },
   {
     id: '2',
-    title: 'Business Strategy Fundamentals',
-    instructor: 'Michael Brown',
-    rating: 4.6,
-    duration: '8h 15m',
-    students: 12500,
-    price: 44.99,
-    image: require('../../assets/images/popular-course4.png'),
-    isSaved: false,
+    title: 'UI/UX Design Masterclass',
+    instructor: 'Sarah Johnson',
+    rating: 4.8,
+    duration: '28h',
+    image: require('../../assets/images/categories-img2.png'),
+    isSaved: true,
+    progress: 79,
+    lessonsCompleted: 19,
+    totalLessons: 24,
   },
   {
     id: '3',
-    title: 'Digital Marketing Masterclass',
-    instructor: 'Emily Chen',
-    rating: 4.7,
-    duration: '10h 20m',
-    students: 18920,
-    price: 39.99,
-    image: require('../../assets/images/popular-course3.png'),
+    title: 'React & TypeScript Pro',
+    instructor: 'Alex Chen',
+    rating: 4.8,
+    duration: '28h',
+    image: require('../../assets/images/categories-img3.png'),
     isSaved: false,
+    progress: 65,
+    lessonsCompleted: 5,
+    totalLessons: 32,
   },
   {
     id: '4',
-    title: 'Complete UI/UX Design Course',
-    instructor: 'Sarah Johnson',
+    title: 'Machine Learning Fundamentals',
+    instructor: 'Lisa Anderson',
     rating: 4.8,
-    duration: '12h 30m',
-    students: 15420,
-    price: 49.99,
-    image: require('../../assets/images/popular-course1.png'),
-    isSaved: true,
+    duration: '21,5h',
+    image: require('../../assets/images/categories-img4.png'),
+    isSaved: false,
+    progress: 54,
+    lessonsCompleted: 10,
+    totalLessons: 24,
   },
 ];
 
 export default function LearningScreen() {
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const handleCoursePress = (course: typeof myLearningCourses[0]) => {
+    router.push(`/course-details?id=${course.id}&title=${encodeURIComponent(course.title)}&instructor=${encodeURIComponent(course.instructor)}&rating=${course.rating}&students=12000&duration=${encodeURIComponent(course.duration)}&price=49.99` as any);
+  };
 
   const renderHeader = () => (
     <View style={styles.header}>
@@ -108,7 +123,7 @@ export default function LearningScreen() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.categoriesScroll}
       >
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <TouchableOpacity
             key={category}
             style={[
@@ -117,6 +132,11 @@ export default function LearningScreen() {
             ]}
             onPress={() => setSelectedCategory(category)}
           >
+            <Image
+              source={categoryImages[index % categoryImages.length].image}
+              style={styles.categoryImage}
+              resizeMode="cover"
+            />
             <ThemedText
               style={[
                 styles.categoryText,
@@ -132,26 +152,38 @@ export default function LearningScreen() {
     </View>
   );
 
-  const renderRecentSearch = () => (
+  const renderMyLearning = () => (
     <View style={styles.sectionContainer}>
       <View style={styles.sectionHeader}>
-        <ThemedText style={styles.sectionTitle} weight="semiBold">Recent Search</ThemedText>
+        <ThemedText style={styles.sectionTitle} weight="semiBold">My Learning</ThemedText>
         <TouchableOpacity style={styles.seeAllButton}>
           <ThemedText style={styles.seeAllText} weight="medium">See all</ThemedText>
           <SeeArrowIcon width={12} height={7} />
         </TouchableOpacity>
       </View>
       <View style={styles.coursesList}>
-        {recentSearchCourses.map((course, index) => (
+        {myLearningCourses.map((course, index) => (
           <View
             key={course.id}
             style={[
               styles.courseCard,
-              index === recentSearchCourses.length - 1 && styles.lastCard,
+              index === myLearningCourses.length - 1 && styles.lastCard,
             ]}
           >
-            <Image source={course.image} style={styles.courseImage} />
-            <View style={styles.courseContent}>
+            {/* Course Image with Save Button */}
+            <View style={styles.courseImageContainer}>
+              <Image source={course.image} style={styles.courseImage} />
+              <TouchableOpacity style={styles.savedButton}>
+                {course.isSaved ? (
+                  <SavedIcon width={20} height={20} />
+                ) : (
+                  <View style={styles.unsavedButton} />
+                )}
+              </TouchableOpacity>
+            </View>
+
+            {/* Course Info */}
+            <View style={styles.courseInfo}>
               <ThemedText style={styles.courseTitle} weight="semiBold" numberOfLines={1}>
                 {course.title}
               </ThemedText>
@@ -167,23 +199,30 @@ export default function LearningScreen() {
                 <ThemedText style={styles.metaText} weight="regular">
                   {course.duration}
                 </ThemedText>
-                <ThemedText style={styles.metaDot} weight="regular">·</ThemedText>
-                <ThemedText style={styles.metaText} weight="regular">
-                  {course.students.toLocaleString()} students
+              </View>
+
+              {/* Progress Section */}
+              <View style={styles.progressContainer}>
+                <ThemedText style={styles.lessonsText} weight="regular">
+                  {course.lessonsCompleted}/{course.totalLessons} lessons
+                </ThemedText>
+                <ThemedText style={styles.progressText} weight="semiBold">
+                  {course.progress}%
                 </ThemedText>
               </View>
-              <View style={styles.priceRow}>
-                <ThemedText style={styles.price} weight="bold">
-                  ${course.price}
-                </ThemedText>
-                <TouchableOpacity>
-                  {course.isSaved ? (
-                    <SavedIcon width={20} height={20} />
-                  ) : (
-                    <UnsavedIcon width={20} height={20} />
-                  )}
-                </TouchableOpacity>
+              <View style={styles.progressBarContainer}>
+                <View style={[styles.progressBar, { width: `${course.progress}%` }]} />
               </View>
+
+              {/* Continue Learning Button */}
+              <TouchableOpacity 
+                style={styles.continueButton}
+                onPress={() => handleCoursePress(course)}
+              >
+                <ThemedText style={styles.continueButtonText} weight="semiBold">
+                  Continue Learning
+                </ThemedText>
+              </TouchableOpacity>
             </View>
           </View>
         ))}
@@ -200,7 +239,7 @@ export default function LearningScreen() {
         {renderHeader()}
         {renderSearchBar()}
         {renderCategories()}
-        {renderRecentSearch()}
+        {renderMyLearning()}
       </ScrollView>
     </SafeAreaView>
   );
@@ -294,23 +333,30 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#4F46E5',
   },
-  arrow: {
-    fontSize: 14,
-    color: '#4F46E5',
-  },
   // Categories
   categoriesScroll: {
     paddingHorizontal: 20,
     gap: 12,
   },
   categoryChip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 6,
     borderRadius: 20,
     backgroundColor: '#F3F4F6',
+    gap: 8,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   categoryChipActive: {
     backgroundColor: '#4F46E5',
+    borderColor: '#4F46E5',
+  },
+  categoryImage: {
+    width: 28,
+    height: 28,
+    borderRadius: 4,
   },
   categoryText: {
     fontSize: 14,
@@ -322,42 +368,63 @@ const styles = StyleSheet.create({
   // Courses List
   coursesList: {
     paddingHorizontal: 20,
+    gap: 16,
   },
   courseCard: {
-    flexDirection: 'row',
-    gap: 12,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   lastCard: {
-    borderBottomWidth: 0,
+    marginBottom: 0,
+  },
+  courseImageContainer: {
+    position: 'relative',
+    width: '100%',
+    height: 140,
   },
   courseImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 8,
+    width: '100%',
+    height: '100%',
     resizeMode: 'cover',
   },
-  courseContent: {
-    flex: 1,
+  savedButton: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    width: 32,
+    height: 32,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 8,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  unsavedButton: {
+    width: 20,
+    height: 20,
+    backgroundColor: '#E5E7EB',
+    borderRadius: 4,
+  },
+  courseInfo: {
+    padding: 16,
   },
   courseTitle: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#111827',
-    marginBottom: 2,
+    marginBottom: 4,
   },
   courseInstructor: {
     fontSize: 12,
     color: '#9CA3AF',
-    marginBottom: 4,
+    marginBottom: 8,
   },
   ratingRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    marginBottom: 8,
+    marginBottom: 12,
   },
   ratingText: {
     fontSize: 12,
@@ -371,12 +438,40 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#6B7280',
   },
-  priceRow: {
+  // Progress
+  progressContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 6,
   },
-  price: {
+  lessonsText: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  progressText: {
+    fontSize: 12,
+    color: '#4F46E5',
+  },
+  progressBarContainer: {
+    height: 4,
+    backgroundColor: '#E5E7EB',
+    borderRadius: 2,
+    marginBottom: 16,
+  },
+  progressBar: {
+    height: '100%',
+    backgroundColor: '#4F46E5',
+    borderRadius: 2,
+  },
+  // Continue Button
+  continueButton: {
+    backgroundColor: '#EDE9FE',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  continueButtonText: {
     fontSize: 14,
     color: '#4F46E5',
   },
