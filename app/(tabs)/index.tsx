@@ -212,22 +212,24 @@ export default function HomeScreen() {
                 )}
               </TouchableOpacity>
             </View>
-            <ThemedText style={styles.continueTitle} weight="semiBold" numberOfLines={1}>
-              {course.title}
-            </ThemedText>
-            {course.subtitle && (
-              <ThemedText style={styles.continueSubtitle} weight="regular">
-                {course.subtitle}
+            <View style={styles.continueContent}>
+              <ThemedText style={styles.continueTitle} weight="semiBold" numberOfLines={1}>
+                {course.title}
               </ThemedText>
-            )}
-            <ThemedText style={styles.continueInstructor} weight="regular">
-              {course.instructor}
-            </ThemedText>
-            <View style={styles.ratingContainer}>
-              <StarIcon width={12} height={12} />
-              <ThemedText style={styles.ratingText} weight="medium">
-                {course.rating} · {course.duration}
+              {course.subtitle && (
+                <ThemedText style={styles.continueSubtitle} weight="regular">
+                  {course.subtitle}
+                </ThemedText>
+              )}
+              <ThemedText style={styles.continueInstructor} weight="regular">
+                {course.instructor}
               </ThemedText>
+              <View style={styles.ratingContainer}>
+                <StarIcon width={12} height={12} />
+                <ThemedText style={styles.ratingText} weight="medium">
+                  {course.rating} · {course.duration}
+                </ThemedText>
+              </View>
             </View>
             <View style={styles.progressContainer}>
               <View style={styles.progressBar}>
@@ -331,9 +333,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+    paddingBottom: 0,
   },
   scrollContent: {
-    paddingBottom: 24,
   },
   // Header
   header: {
@@ -463,6 +465,7 @@ const styles = StyleSheet.create({
   },
   continueCard: {
     width: 200,
+    justifyContent: 'space-between',
   },
   continueImageContainer: {
     position: 'relative',
@@ -487,6 +490,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  continueContent: {
+    flex: 1,
   },
   continueTitle: {
     fontSize: 14,
@@ -516,6 +522,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    marginTop: 'auto',
+    paddingTop: 8,
   },
   progressBar: {
     flex: 1,

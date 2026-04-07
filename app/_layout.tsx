@@ -40,19 +40,25 @@ export default function RootLayout() {
     }
   }, [fontsLoaded, fontError]);
 
+  // Check onboarding status on mount and when segments change
   useEffect(() => {
     checkOnboardingStatus();
-  }, []);
+  }, [segments]);
 
   useEffect(() => {
-    if (!isLoading && hasCompletedOnboarding !== null) {
-      const isOnboardingRoute = segments[0] === 'onboarding';
-      
-      if (!hasCompletedOnboarding && !isOnboardingRoute) {
-        router.replace('/onboarding');
+    const handleRouting = async () => {
+      if (!isLoading && hasCompletedOnboarding !== null) {
+        const isOnboardingRoute = segments[0] === 'onboarding';
+        const isAuthRoute = segments[0] === '(auth)';
+
+        if (!hasCompletedOnboarding && !isOnboardingRoute) {
+          router.replace('/onboarding');
+        }
       }
-    }
-  }, [isLoading, hasCompletedOnboarding, segments]);
+    };
+
+    handleRouting();
+  }, [isLoading, hasCompletedOnboarding, segments, router]);
 
   const checkOnboardingStatus = async () => {
     try {

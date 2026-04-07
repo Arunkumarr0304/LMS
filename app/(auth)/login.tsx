@@ -2,7 +2,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Pl
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/themed-text';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Import Logo
 import { Image } from 'react-native';
@@ -19,6 +19,7 @@ import Email from '../../assets/images/email.svg';
 
 export default function LoginScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -34,113 +35,115 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardView}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 44 : 0}
-      >
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardView}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 44 : 0}
         >
-          {/* Logo Section */}
-          <View style={styles.logoSection}>
-            <Logo width={200} height={72} />
-          </View>
-
-          {/* Welcome Section */}
-          <View style={styles.welcomeSection}>
-            <ThemedText style={styles.welcomeTitle} weight="bold">Welcome back!</ThemedText>
-            <ThemedText style={styles.welcomeSubtitle} weight="regular">Sign in to continue learning</ThemedText>
-          </View>
-
-          {/* Form Section */}
-          <View style={styles.form}>
-            {/* Email Input */}
-            <View style={styles.inputContainer}>
-              <Mail width={20} height={20} style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Email ID / Phone no"
-                placeholderTextColor="#999"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            {/* Logo Section */}
+            <View style={styles.logoSection}>
+              <Logo width={200} height={72} />
             </View>
 
-            {/* Password Input */}
-            <View style={styles.inputContainer}>
-              <Key width={20} height={20} style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#999"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!showPassword}
-              />
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                {showPassword ? (
-                  <EyeOpen width={20} height={20} style={styles.eyeIcon} />
-                ) : (
-                  <EyeClose width={20} height={20} style={styles.eyeIcon} />
-                )}
-              </TouchableOpacity>
+            {/* Welcome Section */}
+            <View style={styles.welcomeSection}>
+              <ThemedText style={styles.welcomeTitle} weight="bold">Welcome back!</ThemedText>
+              <ThemedText style={styles.welcomeSubtitle} weight="regular">Sign in to continue learning</ThemedText>
             </View>
 
-            {/* Remember Me & Forgot Password */}
-            <View style={styles.rememberForgotContainer}>
-              <TouchableOpacity style={styles.rememberContainer} onPress={() => setRememberMe(!rememberMe)}>
-                <View style={[styles.checkbox, rememberMe && styles.checkboxChecked]}>
-                  {rememberMe && <View style={styles.checkboxInner} />}
-                </View>
-                <ThemedText style={styles.rememberText} weight="regular">Remember me</ThemedText>
+            {/* Form Section */}
+            <View style={styles.form}>
+              {/* Email Input */}
+              <View style={styles.inputContainer}>
+                <Mail width={20} height={20} style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email ID / Phone no"
+                  placeholderTextColor="#999"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+              </View>
+
+              {/* Password Input */}
+              <View style={styles.inputContainer}>
+                <Key width={20} height={20} style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  placeholderTextColor="#999"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                />
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                  {showPassword ? (
+                    <EyeOpen width={20} height={20} style={styles.eyeIcon} />
+                  ) : (
+                    <EyeClose width={20} height={20} style={styles.eyeIcon} />
+                  )}
+                </TouchableOpacity>
+              </View>
+
+              {/* Remember Me & Forgot Password */}
+              <View style={styles.rememberForgotContainer}>
+                <TouchableOpacity style={styles.rememberContainer} onPress={() => setRememberMe(!rememberMe)}>
+                  <View style={[styles.checkbox, rememberMe && styles.checkboxChecked]}>
+                    {rememberMe && <View style={styles.checkboxInner} />}
+                  </View>
+                  <ThemedText style={styles.rememberText} weight="regular">Remember me</ThemedText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push('/(auth)/verification')}>
+                  <ThemedText style={styles.forgotText} weight="medium">Forgot password?</ThemedText>
+                </TouchableOpacity>
+              </View>
+
+              {/* Login Button */}
+              <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+                <ThemedText style={styles.loginButtonText} weight="semiBold">Login</ThemedText>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => router.push('/(auth)/verification')}>
-                <ThemedText style={styles.forgotText} weight="medium">Forgot password?</ThemedText>
-              </TouchableOpacity>
+
+              {/* Divider */}
+              <View style={styles.dividerContainer}>
+                <View style={styles.dividerLine} />
+                <ThemedText style={styles.dividerText} weight="regular">or</ThemedText>
+                <View style={styles.dividerLine} />
+              </View>
+
+              {/* Social Login Buttons */}
+              <View style={styles.socialContainer}>
+                <TouchableOpacity style={styles.socialButton} onPress={() => handleSocialLogin('google')}>
+                  <Google width={24} height={24} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.socialButton} onPress={() => handleSocialLogin('apple')}>
+                  <Apple width={24} height={24} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.socialButton} onPress={() => handleSocialLogin('email')}>
+                  <Email width={24} height={24} />
+                </TouchableOpacity>
+              </View>
             </View>
+          </ScrollView>
 
-            {/* Login Button */}
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-              <ThemedText style={styles.loginButtonText} weight="semiBold">Login</ThemedText>
-            </TouchableOpacity>
-
-            {/* Divider */}
-            <View style={styles.dividerContainer}>
-              <View style={styles.dividerLine} />
-              <ThemedText style={styles.dividerText} weight="regular">or</ThemedText>
-              <View style={styles.dividerLine} />
-            </View>
-
-            {/* Social Login Buttons */}
-            <View style={styles.socialContainer}>
-              <TouchableOpacity style={styles.socialButton} onPress={() => handleSocialLogin('google')}>
-                <Google width={24} height={24} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.socialButton} onPress={() => handleSocialLogin('apple')}>
-                <Apple width={24} height={24} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.socialButton} onPress={() => handleSocialLogin('email')}>
-                <Email width={24} height={24} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Sign Up Footer */}
-          <View style={styles.footer}>
+          {/* Sign Up Footer - Fixed at bottom */}
+          <View style={[styles.footer, { marginBottom: Math.max(insets.bottom, Platform.OS === 'android' ? 18 : 18) }]}>
             <ThemedText style={styles.footerText} weight="regular">Don't have an account? </ThemedText>
             <TouchableOpacity onPress={() => router.push('/signup')}>
               <ThemedText style={styles.signupText} weight="semiBold">Sign up</ThemedText>
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </View>
   );
 }
 
@@ -149,6 +152,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  safeArea: {
+    flex: 1,
+  },
   keyboardView: {
     flex: 1,
   },
@@ -156,7 +162,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 24,
     paddingTop: 20,
-    paddingBottom: 40,
   },
   logoSection: {
     alignItems: 'center',
@@ -286,7 +291,9 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 30,
+    paddingHorizontal: 24,
+    paddingTop: 18,
+    paddingBottom: 18,
   },
   footerText: {
     fontSize: 14,

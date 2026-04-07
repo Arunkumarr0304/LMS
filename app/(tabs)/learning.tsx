@@ -19,13 +19,6 @@ import SeeArrowIcon from '../../assets/images/see-arrow.svg';
 
 const categories = ['All', 'Design', 'Programming', 'Marketing'];
 
-const categoryImages = [
-  { image: require('../../assets/images/categories-img1.png') },
-  { image: require('../../assets/images/categories-img2.png') },
-  { image: require('../../assets/images/categories-img3.png') },
-  { image: require('../../assets/images/categories-img4.png') },
-];
-
 const myLearningCourses = [
   {
     id: '1',
@@ -123,7 +116,7 @@ export default function LearningScreen() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.categoriesScroll}
       >
-        {categories.map((category, index) => (
+        {categories.map((category) => (
           <TouchableOpacity
             key={category}
             style={[
@@ -132,11 +125,6 @@ export default function LearningScreen() {
             ]}
             onPress={() => setSelectedCategory(category)}
           >
-            <Image
-              source={categoryImages[index % categoryImages.length].image}
-              style={styles.categoryImage}
-              resizeMode="cover"
-            />
             <ThemedText
               style={[
                 styles.categoryText,
@@ -339,24 +327,16 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   categoryChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 20,
     backgroundColor: '#F3F4F6',
-    gap: 8,
     borderWidth: 1,
     borderColor: '#E5E7EB',
   },
   categoryChipActive: {
     backgroundColor: '#4F46E5',
     borderColor: '#4F46E5',
-  },
-  categoryImage: {
-    width: 28,
-    height: 28,
-    borderRadius: 4,
   },
   categoryText: {
     fontSize: 14,

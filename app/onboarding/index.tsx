@@ -38,8 +38,9 @@ export default function OnboardingScreen() {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleSkip = useCallback(() => {
-    router.replace('/(tabs)');
+  const handleSkip = useCallback(async () => {
+    await AsyncStorage.setItem('hasCompletedOnboarding', 'true');
+    router.replace('/(auth)/login');
   }, [router]);
 
   const handleGetStarted = useCallback(async () => {
@@ -121,11 +122,11 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    padding: 20,
+    paddingHorizontal: 16,
   },
   paginationContainer: {
-    paddingTop: 60,
-    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingHorizontal: 16,
   },
   pagination: {
     flexDirection: 'row',
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     paddingBottom: 100,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
   textContainer: {
     alignItems: 'flex-start',
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingBottom: 40,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
   skipText: {
     fontSize: 16,

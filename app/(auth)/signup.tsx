@@ -2,7 +2,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Pl
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/themed-text';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 // Import SVG icons
 import { Image } from 'react-native';
@@ -18,6 +18,7 @@ import Phone from '../../assets/images/phone.svg';
 
 export default function SignupScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [fullName, setFullName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -33,135 +34,137 @@ export default function SignupScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardView}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 44 : 0}
-      >
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardView}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 44 : 0}
         >
-          {/* Logo Section */}
-          <View style={styles.logoSection}>
-            <Logo width={200} height={72} />
-            <ThemedText style={styles.tagline} weight="regular">Learn Skills. Grow Daily.</ThemedText>
-          </View>
-
-          {/* Sign Up Title Section */}
-          <View style={styles.titleSection}>
-            <ThemedText style={styles.titleText} weight="bold">Sign Up</ThemedText>
-            <ThemedText style={styles.subtitleText} weight="regular">Sign up to start learning</ThemedText>
-          </View>
-
-          {/* Form Section */}
-          <View style={styles.form}>
-            {/* Full Name Input */}
-            <View style={styles.inputContainer}>
-              <User width={20} height={20} style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Full name"
-                placeholderTextColor="#999"
-                value={fullName}
-                onChangeText={setFullName}
-                autoCapitalize="words"
-              />
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            {/* Logo Section */}
+            <View style={styles.logoSection}>
+              <Logo width={200} height={72} />
+              <ThemedText style={styles.tagline} weight="regular">Learn Skills. Grow Daily.</ThemedText>
             </View>
 
-            {/* Email Input */}
-            <View style={styles.inputContainer}>
-              <Mail width={20} height={20} style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#999"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
+            {/* Sign Up Title Section */}
+            <View style={styles.titleSection}>
+              <ThemedText style={styles.titleText} weight="bold">Sign Up</ThemedText>
+              <ThemedText style={styles.subtitleText} weight="regular">Sign up to start learning</ThemedText>
             </View>
 
-            {/* Phone Number Input */}
-            <View style={styles.inputContainer}>
-              <Phone width={20} height={20} style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Phone number"
-                placeholderTextColor="#999"
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-                keyboardType="phone-pad"
-              />
-            </View>
-
-            {/* Password Input */}
-            <View style={styles.inputContainer}>
-              <Key width={20} height={20} style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#999"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!showPassword}
-              />
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                {showPassword ? (
-                  <EyeOpen width={20} height={20} style={styles.eyeIcon} />
-                ) : (
-                  <EyeClose width={20} height={20} style={styles.eyeIcon} />
-                )}
-              </TouchableOpacity>
-            </View>
-
-            {/* Confirm Password Input */}
-            <View style={styles.inputContainer}>
-              <Key width={20} height={20} style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Confirm Password"
-                placeholderTextColor="#999"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry={!showConfirmPassword}
-              />
-              <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
-                {showConfirmPassword ? (
-                  <EyeOpen width={20} height={20} style={styles.eyeIcon} />
-                ) : (
-                  <EyeClose width={20} height={20} style={styles.eyeIcon} />
-                )}
-              </TouchableOpacity>
-            </View>
-
-            {/* Accept Terms Checkbox */}
-            <TouchableOpacity style={styles.termsContainer} onPress={() => setAcceptedTerms(!acceptedTerms)}>
-              <View style={[styles.checkbox, acceptedTerms && styles.checkboxChecked]}>
-                {acceptedTerms && <View style={styles.checkboxInner} />}
+            {/* Form Section */}
+            <View style={styles.form}>
+              {/* Full Name Input */}
+              <View style={styles.inputContainer}>
+                <User width={20} height={20} style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Full name"
+                  placeholderTextColor="#999"
+                  value={fullName}
+                  onChangeText={setFullName}
+                  autoCapitalize="words"
+                />
               </View>
-              <ThemedText style={styles.termsText} weight="regular">Accept terms & conditions</ThemedText>
-            </TouchableOpacity>
 
-            {/* Create Account Button */}
-            <TouchableOpacity style={styles.createAccountButton} onPress={handleCreateAccount}>
-              <ThemedText style={styles.createAccountButtonText} weight="semiBold">Create account</ThemedText>
-            </TouchableOpacity>
-          </View>
+              {/* Email Input */}
+              <View style={styles.inputContainer}>
+                <Mail width={20} height={20} style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Email"
+                  placeholderTextColor="#999"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+              </View>
 
-          {/* Login Footer */}
-          <View style={styles.footer}>
+              {/* Phone Number Input */}
+              <View style={styles.inputContainer}>
+                <Phone width={20} height={20} style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Phone number"
+                  placeholderTextColor="#999"
+                  value={phoneNumber}
+                  onChangeText={setPhoneNumber}
+                  keyboardType="phone-pad"
+                />
+              </View>
+
+              {/* Password Input */}
+              <View style={styles.inputContainer}>
+                <Key width={20} height={20} style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  placeholderTextColor="#999"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                />
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                  {showPassword ? (
+                    <EyeOpen width={20} height={20} style={styles.eyeIcon} />
+                  ) : (
+                    <EyeClose width={20} height={20} style={styles.eyeIcon} />
+                  )}
+                </TouchableOpacity>
+              </View>
+
+              {/* Confirm Password Input */}
+              <View style={styles.inputContainer}>
+                <Key width={20} height={20} style={styles.inputIcon} />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Confirm Password"
+                  placeholderTextColor="#999"
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry={!showConfirmPassword}
+                />
+                <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                  {showConfirmPassword ? (
+                    <EyeOpen width={20} height={20} style={styles.eyeIcon} />
+                  ) : (
+                    <EyeClose width={20} height={20} style={styles.eyeIcon} />
+                  )}
+                </TouchableOpacity>
+              </View>
+
+              {/* Accept Terms Checkbox */}
+              <TouchableOpacity style={styles.termsContainer} onPress={() => setAcceptedTerms(!acceptedTerms)}>
+                <View style={[styles.checkbox, acceptedTerms && styles.checkboxChecked]}>
+                  {acceptedTerms && <View style={styles.checkboxInner} />}
+                </View>
+                <ThemedText style={styles.termsText} weight="regular">Accept terms & conditions</ThemedText>
+              </TouchableOpacity>
+
+              {/* Create Account Button */}
+              <TouchableOpacity style={styles.createAccountButton} onPress={handleCreateAccount}>
+                <ThemedText style={styles.createAccountButtonText} weight="semiBold">Create account</ThemedText>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+
+          {/* Login Footer - Fixed at bottom */}
+          <View style={[styles.footer, { marginBottom: Math.max(insets.bottom, Platform.OS === 'android' ? 18 : 18) }]}>
             <ThemedText style={styles.footerText} weight="regular">Already have an account? </ThemedText>
             <TouchableOpacity onPress={() => router.push('/login')}>
               <ThemedText style={styles.loginText} weight="semiBold">Login</ThemedText>
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </View>
   );
 }
 
@@ -170,6 +173,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  safeArea: {
+    flex: 1,
+  },
   keyboardView: {
     flex: 1,
   },
@@ -177,7 +183,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 24,
     paddingTop: 20,
-    paddingBottom: 40,
   },
   logoSection: {
     alignItems: 'center',
@@ -268,7 +273,9 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 30,
+    paddingHorizontal: 24,
+    paddingTop: 18,
+    paddingBottom: 18,
   },
   footerText: {
     fontSize: 14,

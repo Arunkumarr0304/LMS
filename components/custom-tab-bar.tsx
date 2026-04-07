@@ -1,5 +1,6 @@
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter, usePathname } from 'expo-router';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemedText } from './themed-text';
 
 import HomeIcon from '../assets/images/home.svg';
@@ -19,15 +20,15 @@ const tabs = [
 export function CustomTabBar() {
   const router = useRouter();
   const pathname = usePathname();
+  const insets = useSafeAreaInsets();
 
   const isActive = (path: string) => {
-    // Exact match for home (/) or exact match for other paths
     return pathname === path;
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.tabBar}>
+      <View style={[styles.tabBar, { paddingBottom: Math.max(insets.bottom, 8) }]}>
         {tabs.map((tab) => {
           const active = isActive(tab.path);
           return (
@@ -41,7 +42,7 @@ export function CustomTabBar() {
                 <tab.Icon
                   width={22}
                   height={22}
-                  fill={active ? '#5856D6' : '#999999'}
+                  stroke={active ? '#5856D6' : '#999999'}
                 />
               </View>
               <ThemedText
@@ -68,8 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: 8,
-    paddingBottom: 44, // Extra padding for safe area
+    paddingTop: 8,
   },
   tab: {
     flex: 1,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   activeTab: {
-    backgroundColor: '#F5F5FF', // Light purple background for active
+    backgroundColor: '#F5F5FF',
   },
   iconContainer: {
     alignItems: 'center',
@@ -96,6 +96,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   activeLabel: {
-    color: '#5856D6', // Purple color for active
+    color: '#5856D6',
   },
 });
