@@ -48,7 +48,6 @@ export default function LoginScreen() {
           {/* Logo Section */}
           <View style={styles.logoSection}>
             <Logo width={200} height={72} />
-            <ThemedText style={styles.tagline} weight="regular">Learn Skills. Grow Daily.</ThemedText>
           </View>
 
           {/* Welcome Section */}

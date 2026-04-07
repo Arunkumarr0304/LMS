@@ -303,7 +303,14 @@ export default function CourseDetailsScreen() {
   };
 
   const handleEnrollPress = () => {
-    console.log('Enroll pressed');
+    router.push({
+      pathname: '/payment',
+      params: {
+        courseId: id,
+        courseTitle: title,
+        price: price,
+      },
+    });
   };
 
   const formatStudents = (num: string) => {

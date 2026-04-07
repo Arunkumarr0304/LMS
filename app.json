@@ -19,8 +19,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "splash": {
-        "image": "./assets/images/splash-icon.png",
-        "resizeMode": "cover",
+        "image": "./assets/images/splash-image.svg",
+        "resizeMode": "contain",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -36,11 +36,11 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "resizeMode": "cover",
+          "image": "./assets/images/splash-image.svg",
+          "resizeMode": "contain",
           "backgroundColor": "#ffffff",
           "dark": {
-            "image": "./assets/images/splash-icon.png",
+            "image": "./assets/images/splash-image.svg",
             "backgroundColor": "#000000"
           }
         }
