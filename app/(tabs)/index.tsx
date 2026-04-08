@@ -30,7 +30,7 @@ const continueLearningCourses = [
     duration: '28h',
     progress: 65,
     image: require('../../assets/images/categories-img1.png'),
-    isSaved: true,
+    isSaved: false,
   },
   {
     id: '2',
@@ -54,7 +54,7 @@ const popularCourses = [
     students: 15420,
     price: 49.99,
     image: require('../../assets/images/popular-course1.png'),
-    isSaved: true,
+    isSaved: false,
   },
   {
     id: '2',
@@ -104,7 +104,21 @@ const popularCourses = [
 
 export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [continueCourses, setContinueCourses] = useState(continueLearningCourses);
+  const [popularCoursesState, setPopularCoursesState] = useState(popularCourses);
   const router = useRouter();
+
+  const toggleSaveContinueCourse = (courseId: string) => {
+    setContinueCourses(prev => prev.map(course => 
+      course.id === courseId ? { ...course, isSaved: !course.isSaved } : course
+    ));
+  };
+
+  const toggleSavePopularCourse = (courseId: string) => {
+    setPopularCoursesState(prev => prev.map(course => 
+      course.id === courseId ? { ...course, isSaved: !course.isSaved } : course
+    ));
+  };
 
   const handleNotificationPress = () => {
     router.push('/notifications');
@@ -195,7 +209,7 @@ export default function HomeScreen() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.continueLearningScroll}
       >
-        {continueLearningCourses.map((course) => (
+        {continueCourses.map((course) => (
           <TouchableOpacity 
             key={course.id} 
             style={styles.continueCard}
@@ -204,7 +218,13 @@ export default function HomeScreen() {
           >
             <View style={styles.continueImageContainer}>
               <Image source={course.image} style={styles.continueImage} />
-              <TouchableOpacity style={styles.saveButton}>
+              <TouchableOpacity 
+                style={styles.saveButton}
+                onPress={(e) => {
+                  e.stopPropagation();
+                  toggleSaveContinueCourse(course.id);
+                }}
+              >
                 {course.isSaved ? (
                   <SavedIcon width={16} height={16} />
                 ) : (
@@ -255,12 +275,12 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
       <View style={styles.popularList}>
-        {popularCourses.map((course, index) => (
+        {popularCoursesState.map((course, index) => (
           <TouchableOpacity
             key={course.id}
             style={[
               styles.popularCard,
-              index === popularCourses.length - 1 && styles.lastCard,
+              index === popularCoursesState.length - 1 && styles.lastCard,
             ]}
             onPress={() => handleCoursePress(course)}
             activeOpacity={0.8}
@@ -296,7 +316,7 @@ export default function HomeScreen() {
                 <TouchableOpacity
                   onPress={(e) => {
                     e.stopPropagation();
-                    // Handle save toggle
+                    toggleSavePopularCourse(course.id);
                   }}
                 >
                   {course.isSaved ? (

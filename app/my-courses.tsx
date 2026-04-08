@@ -9,7 +9,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import BackIcon from '../assets/images/back.svg';
 import StarIcon from '../assets/images/star.svg';
 import SavedIcon from '../assets/images/saved.svg';
 
@@ -23,7 +22,7 @@ const myCourses = [
     rating: 4.8,
     duration: '28h',
     image: require('../assets/images/popular-course1.png'),
-    isSaved: true,
+    isSaved: false,
     progress: 65,
     lessonsCompleted: 18,
     totalLessons: 28,
@@ -36,7 +35,7 @@ const myCourses = [
     rating: 4.8,
     duration: '28h',
     image: require('../assets/images/popular-course2.png'),
-    isSaved: true,
+    isSaved: false,
     progress: 30,
     lessonsCompleted: 10,
     totalLessons: 24,
@@ -49,7 +48,7 @@ const myCourses = [
     rating: 4.8,
     duration: '28h',
     image: require('../assets/images/popular-course3.png'),
-    isSaved: true,
+    isSaved: false,
     progress: 65,
     lessonsCompleted: 5,
     totalLessons: 32,
@@ -62,7 +61,7 @@ const myCourses = [
     rating: 4.8,
     duration: '21.5h',
     image: require('../assets/images/popular-course4.png'),
-    isSaved: true,
+    isSaved: false,
     progress: 54,
     lessonsCompleted: 10,
     totalLessons: 24,
@@ -73,35 +72,26 @@ const myCourses = [
 export default function MyCoursesScreen() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('All (3)');
+  const [courses, setCourses] = useState(myCourses);
 
-  const handleBack = () => {
-    router.back();
+  const toggleSaveCourse = (courseId: string) => {
+    setCourses(prev => prev.map(course => 
+      course.id === courseId ? { ...course, isSaved: !course.isSaved } : course
+    ));
   };
 
   const filteredCourses = () => {
     switch (activeTab) {
       case 'All (3)':
-        return myCourses;
+        return courses;
       case 'In Progress (2)':
-        return myCourses.filter(course => course.status === 'in-progress');
+        return courses.filter(course => course.status === 'in-progress');
       case 'Completed (1)':
-        return myCourses.filter(course => course.status === 'completed');
+        return courses.filter(course => course.status === 'completed');
       default:
-        return myCourses;
+        return courses;
     }
   };
-
-  const renderHeader = () => (
-    <View style={styles.header}>
-      <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-        <BackIcon width={20} height={20} />
-      </TouchableOpacity>
-      <ThemedText style={styles.title} weight="bold">
-        My Courses
-      </ThemedText>
-      <View style={styles.placeholder} />
-    </View>
-  );
 
   const renderTabs = () => (
     <View style={styles.tabsContainer}>
@@ -133,7 +123,10 @@ export default function MyCoursesScreen() {
       {/* Course Image with Save Button */}
       <View style={styles.courseImageContainer}>
         <Image source={course.image} style={styles.courseImage} />
-        <TouchableOpacity style={styles.savedButton}>
+        <TouchableOpacity 
+          style={styles.savedButton}
+          onPress={() => toggleSaveCourse(course.id)}
+        >
           {course.isSaved ? (
             <SavedIcon width={20} height={20} />
           ) : (
@@ -185,12 +178,11 @@ export default function MyCoursesScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {renderHeader()}
         {renderTabs()}
         <View style={styles.coursesList}>
           {filteredCourses().map(renderCourseCard)}
@@ -208,32 +200,11 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 24,
   },
-  // Header
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 16,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 18,
-    color: '#111827',
-  },
-  placeholder: {
-    width: 44,
-  },
   // Tabs
   tabsContainer: {
     flexDirection: 'row',
     paddingHorizontal: 20,
+    marginTop: 8,
     marginBottom: 20,
     gap: 8,
   },

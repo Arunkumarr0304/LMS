@@ -6,8 +6,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
-import { useRouter } from 'expo-router';
-import BackIcon from '../assets/images/back.svg';
 import WalletIcon from '../assets/images/wallet-icon.svg';
 import PaymentIconBlue from '../assets/images/payment-icon-blue.svg';
 import PaymentIconGrey from '../assets/images/payment-icon-grey.svg';
@@ -45,24 +43,6 @@ const transactions = [
 ];
 
 export default function PaymentHistoryScreen() {
-  const router = useRouter();
-
-  const handleBack = () => {
-    router.back();
-  };
-
-  const renderHeader = () => (
-    <View style={styles.header}>
-      <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-        <BackIcon width={20} height={20} />
-      </TouchableOpacity>
-      <ThemedText style={styles.title} weight="bold">
-        Payment History
-      </ThemedText>
-      <View style={styles.placeholder} />
-    </View>
-  );
-
   const renderStatsCard = () => (
     <View style={styles.statsCard}>
       {/* Total Spent */}
@@ -152,12 +132,11 @@ export default function PaymentHistoryScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {renderHeader()}
         {renderStatsCard()}
         
         {/* Transaction History Section */}
@@ -182,31 +161,10 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 24,
   },
-  // Header
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 16,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 18,
-    color: '#111827',
-  },
-  placeholder: {
-    width: 44,
-  },
   // Stats Card
   statsCard: {
     marginHorizontal: 20,
+    marginTop: 8,
     marginBottom: 24,
     backgroundColor: '#FFFFFF',
     borderRadius: 12,

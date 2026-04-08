@@ -15,6 +15,7 @@ import SearchIcon from '../../assets/images/search.svg';
 import FilterIcon from '../../assets/images/filter-icon.svg';
 import StarIcon from '../../assets/images/star.svg';
 import SavedIcon from '../../assets/images/saved.svg';
+import UnsavedIcon from '../../assets/images/unsaved.svg';
 import SeeArrowIcon from '../../assets/images/see-arrow.svg';
 
 const categories = ['All', 'Design', 'Programming', 'Marketing'];
@@ -27,7 +28,7 @@ const myLearningCourses = [
     rating: 4.8,
     duration: '28h',
     image: require('../../assets/images/categories-img1.png'),
-    isSaved: true,
+    isSaved: false,
     progress: 65,
     lessonsCompleted: 18,
     totalLessons: 28,
@@ -39,7 +40,7 @@ const myLearningCourses = [
     rating: 4.8,
     duration: '28h',
     image: require('../../assets/images/categories-img2.png'),
-    isSaved: true,
+    isSaved: false,
     progress: 79,
     lessonsCompleted: 19,
     totalLessons: 24,
@@ -73,6 +74,13 @@ const myLearningCourses = [
 export default function LearningScreen() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [courses, setCourses] = useState(myLearningCourses);
+
+  const toggleSaveCourse = (courseId: string) => {
+    setCourses(prev => prev.map(course => 
+      course.id === courseId ? { ...course, isSaved: !course.isSaved } : course
+    ));
+  };
 
   const handleCoursePress = (course: typeof myLearningCourses[0]) => {
     router.push(`/course-details?id=${course.id}&title=${encodeURIComponent(course.title)}&instructor=${encodeURIComponent(course.instructor)}&rating=${course.rating}&students=12000&duration=${encodeURIComponent(course.duration)}&price=49.99` as any);
@@ -150,7 +158,7 @@ export default function LearningScreen() {
         </TouchableOpacity>
       </View>
       <View style={styles.coursesList}>
-        {myLearningCourses.map((course, index) => (
+        {courses.map((course, index) => (
           <View
             key={course.id}
             style={[
@@ -161,11 +169,14 @@ export default function LearningScreen() {
             {/* Course Image with Save Button */}
             <View style={styles.courseImageContainer}>
               <Image source={course.image} style={styles.courseImage} />
-              <TouchableOpacity style={styles.savedButton}>
+              <TouchableOpacity 
+                style={styles.savedButton}
+                onPress={() => toggleSaveCourse(course.id)}
+              >
                 {course.isSaved ? (
                   <SavedIcon width={20} height={20} />
                 ) : (
-                  <View style={styles.unsavedButton} />
+                  <UnsavedIcon width={20} height={20} />
                 )}
               </TouchableOpacity>
             </View>

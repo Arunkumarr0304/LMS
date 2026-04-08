@@ -87,6 +87,11 @@ export default function RootLayout() {
         <Stack.Screen name="lesson-details" options={{ headerShown: false }} />
         <Stack.Screen name="payment" options={{ headerShown: false }} />
         <Stack.Screen name="payment-success" options={{ headerShown: false }} />
+        <Stack.Screen name="my-courses" options={{ title: 'My Courses', headerTitleAlign: 'center' }} />
+        <Stack.Screen name="certificates" options={{ title: 'My Certificates', headerTitleAlign: 'center' }} />
+        <Stack.Screen name="payment-history" options={{ title: 'Payment History', headerTitleAlign: 'center' }} />
+        <Stack.Screen name="help-center" options={{ title: 'Help Center', headerTitleAlign: 'center' }} />
+        <Stack.Screen name="settings" options={{ title: 'Settings', headerTitleAlign: 'center' }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
       <StatusBar style="auto" />

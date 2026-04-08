@@ -7,10 +7,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import BackIcon from '../assets/images/back.svg';
 import SearchIcon from '../assets/images/search.svg';
+import RightArrowBlue from '../assets/images/right-arrow-blue.svg';
 import QuickLinkIcon1 from '../assets/images/quick-link-icon1.svg';
 import QuickLinkIcon2 from '../assets/images/quick-link-icon2.svg';
 import QuickLinkIcon3 from '../assets/images/quick-link-icon3.svg';
@@ -80,25 +79,8 @@ const additionalResources = [
 ];
 
 export default function HelpCenterScreen() {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
-
-  const handleBack = () => {
-    router.back();
-  };
-
-  const renderHeader = () => (
-    <View style={styles.header}>
-      <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-        <BackIcon width={20} height={20} />
-      </TouchableOpacity>
-      <ThemedText style={styles.title} weight="bold">
-        Help Center
-      </ThemedText>
-      <View style={styles.placeholder} />
-    </View>
-  );
 
   const renderHeroSection = () => (
     <View style={styles.heroSection}>
@@ -159,12 +141,21 @@ export default function HelpCenterScreen() {
             style={styles.faqItem}
             onPress={() => setExpandedFaq(expandedFaq === index ? null : index)}
           >
-            <ThemedText style={styles.faqText} weight="regular">
-              {faq}
-            </ThemedText>
-            <ThemedText style={styles.faqArrow} weight="regular">
-              {expandedFaq === index ? '⌄' : '›'}
-            </ThemedText>
+            <View style={styles.faqContent}>
+              <View style={styles.faqHeader}>
+                <ThemedText style={styles.faqText} weight="regular">
+                  {faq}
+                </ThemedText>
+                <View style={[styles.arrowContainer, expandedFaq === index && styles.arrowRotated]}>
+                  <RightArrowBlue width={16} height={16} />
+                </View>
+              </View>
+              {expandedFaq === index && (
+                <ThemedText style={styles.faqAnswer} weight="regular">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </ThemedText>
+              )}
+            </View>
           </TouchableOpacity>
         ))}
       </View>
@@ -233,12 +224,11 @@ export default function HelpCenterScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {renderHeader()}
         {renderHeroSection()}
         {renderQuickLinks()}
         {renderFAQs()}
@@ -257,34 +247,11 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 24,
   },
-  // Header
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 16,
-    backgroundColor: '#FFFFFF',
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 18,
-    color: '#111827',
-  },
-  placeholder: {
-    width: 44,
-  },
   // Hero Section
   heroSection: {
     backgroundColor: '#4F46E5',
     paddingHorizontal: 20,
-    paddingTop: 24,
+    paddingTop: 8,
     paddingBottom: 32,
     alignItems: 'center',
   },
@@ -351,9 +318,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   faqItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     borderWidth: 1,
@@ -361,14 +325,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
   },
+  faqContent: {
+    width: '100%',
+  },
+  faqHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   faqText: {
     fontSize: 14,
     color: '#111827',
     flex: 1,
   },
-  faqArrow: {
-    fontSize: 20,
-    color: '#4F46E5',
+  arrowContainer: {
+    transform: [{ rotate: '0deg' }],
+  },
+  arrowRotated: {
+    transform: [{ rotate: '90deg' }],
+  },
+  faqAnswer: {
+    fontSize: 14,
+    color: '#6B7280',
+    lineHeight: 20,
+    marginTop: 12,
   },
   // Contact Support
   contactCard: {

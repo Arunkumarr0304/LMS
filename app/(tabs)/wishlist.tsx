@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import BackIcon from '../../assets/images/back.svg';
 import StarIcon from '../../assets/images/star.svg';
 import SavedIcon from '../../assets/images/saved.svg';
+import UnsavedIcon from '../../assets/images/unsaved.svg';
 
 const wishlistCourses = [
   {
@@ -22,7 +23,7 @@ const wishlistCourses = [
     duration: '28h',
     price: 49.99,
     image: require('../../assets/images/wishlist-image1.png'),
-    isSaved: true,
+    isSaved: false,
   },
   {
     id: '2',
@@ -32,13 +33,19 @@ const wishlistCourses = [
     duration: '28h',
     price: 29.99,
     image: require('../../assets/images/wishlist-image2.png'),
-    isSaved: true,
+    isSaved: false,
   },
 ];
 
 export default function WishlistScreen() {
   const router = useRouter();
   const [courses, setCourses] = useState(wishlistCourses);
+
+  const toggleSaveCourse = (courseId: string) => {
+    setCourses(prev => prev.map(course => 
+      course.id === courseId ? { ...course, isSaved: !course.isSaved } : course
+    ));
+  };
 
   const handleEnroll = (course: typeof wishlistCourses[0]) => {
     router.push(`/course-details?id=${course.id}&title=${encodeURIComponent(course.title)}&instructor=${encodeURIComponent(course.instructor)}&rating=${course.rating}&students=12000&duration=${encodeURIComponent(course.duration)}&price=${course.price}` as any);
@@ -66,8 +73,15 @@ export default function WishlistScreen() {
     >
       <View style={styles.imageContainer}>
         <Image source={course.image} style={styles.courseImage} />
-        <TouchableOpacity style={styles.saveButton}>
-          <SavedIcon width={16} height={16} />
+        <TouchableOpacity 
+          style={styles.saveButton}
+          onPress={() => toggleSaveCourse(course.id)}
+        >
+          {course.isSaved ? (
+            <SavedIcon width={16} height={16} />
+          ) : (
+            <UnsavedIcon width={16} height={16} />
+          )}
         </TouchableOpacity>
       </View>
       

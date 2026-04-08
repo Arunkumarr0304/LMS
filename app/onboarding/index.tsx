@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   paginationContainer: {
-    paddingTop: 20,
+    paddingTop: 50,
     paddingHorizontal: 16,
   },
   pagination: {

@@ -166,15 +166,11 @@ export default function CourseDetailsScreen() {
                 {section.lessons} lessons
               </ThemedText>
             </View>
-            {expandedSections.includes(section.id) ? (
-              <NextArrowIcon 
-                width={16} 
-                height={16} 
-                style={{ transform: [{ rotate: '90deg' }] }}
-              />
-            ) : (
-              <RightArcIcon width={16} height={16} />
-            )}
+            <RightArcIcon 
+              width={16} 
+              height={16} 
+              style={expandedSections.includes(section.id) ? { transform: [{ rotate: '90deg' }] } : undefined}
+            />
           </TouchableOpacity>
           
           {expandedSections.includes(section.id) && (

@@ -31,7 +31,7 @@ const recentSearchCourses = [
     students: 18500,
     price: 49.99,
     image: require('../../assets/images/popular-course5.png'),
-    isSaved: true,
+    isSaved: false,
   },
   {
     id: '2',
@@ -64,13 +64,20 @@ const recentSearchCourses = [
     students: 15420,
     price: 49.99,
     image: require('../../assets/images/popular-course1.png'),
-    isSaved: true,
+    isSaved: false,
   },
 ];
 
 export default function ExploreScreen() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [courses, setCourses] = useState(recentSearchCourses);
+
+  const toggleSaveCourse = (courseId: string) => {
+    setCourses(prev => prev.map(course => 
+      course.id === courseId ? { ...course, isSaved: !course.isSaved } : course
+    ));
+  };
 
   const handleCoursePress = (course: typeof recentSearchCourses[0]) => {
     router.push(`/course-details?id=${course.id}&title=${encodeURIComponent(course.title)}&instructor=${encodeURIComponent(course.instructor)}&rating=${course.rating}&students=${course.students}&duration=${encodeURIComponent(course.duration)}&price=${course.price}` as any);
@@ -144,7 +151,7 @@ export default function ExploreScreen() {
         <ThemedText style={styles.sectionTitle} weight="semiBold">Recent Search</ThemedText>
       </View>
       <View style={styles.coursesList}>
-        {recentSearchCourses.map((course, index) => (
+        {courses.map((course, index) => (
           <TouchableOpacity
             key={course.id}
             style={[
@@ -183,7 +190,7 @@ export default function ExploreScreen() {
                 <TouchableOpacity
                   onPress={(e) => {
                     e.stopPropagation();
-                    // Handle save toggle
+                    toggleSaveCourse(course.id);
                   }}
                 >
                   {course.isSaved ? (

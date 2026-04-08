@@ -7,9 +7,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import BackIcon from '../assets/images/back.svg';
 import AccountIcon1 from '../assets/images/account-icon1.svg';
 import AccountIcon2 from '../assets/images/account-icon2.svg';
 import NotificationIcon from '../assets/images/notification.svg';
@@ -24,8 +22,6 @@ import OtherIcon2 from '../assets/images/other-icon2.svg';
 import OtherIcon3 from '../assets/images/other-icon3.svg';
 
 export default function SettingsScreen() {
-  const router = useRouter();
-
   // Notification toggles
   const [pushNotifications, setPushNotifications] = useState(true);
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -37,22 +33,6 @@ export default function SettingsScreen() {
   // Download settings toggles
   const [autoDownload, setAutoDownload] = useState(false);
   const [wifiOnly, setWifiOnly] = useState(false);
-
-  const handleBack = () => {
-    router.back();
-  };
-
-  const renderHeader = () => (
-    <View style={styles.header}>
-      <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-        <BackIcon width={20} height={20} />
-      </TouchableOpacity>
-      <ThemedText style={styles.title} weight="bold">
-        Settings
-      </ThemedText>
-      <View style={styles.placeholder} />
-    </View>
-  );
 
   const renderSectionTitle = (title: string) => (
     <ThemedText style={styles.sectionTitle} weight="semiBold">
@@ -72,12 +52,14 @@ export default function SettingsScreen() {
         <View style={styles.itemLeft}>
           <IconComponent width={20} height={20} />
           <View style={styles.itemTextContainer}>
-            <ThemedText style={styles.itemTitle} weight="regular">
+            <ThemedText style={[styles.itemTitle, !subtitle && styles.itemTitleNoMargin]} weight="regular">
               {title}
             </ThemedText>
-            <ThemedText style={styles.itemSubtitle} weight="regular">
-              {subtitle}
-            </ThemedText>
+            {subtitle ? (
+              <ThemedText style={styles.itemSubtitle} weight="regular">
+                {subtitle}
+              </ThemedText>
+            ) : null}
           </View>
         </View>
         <ThemedText style={styles.arrow} weight="regular">›</ThemedText>
@@ -118,13 +100,11 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {renderHeader()}
-
         {/* Account Section */}
         <View style={styles.section}>
           {renderSectionTitle('Account')}
@@ -237,32 +217,9 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 24,
   },
-  // Header
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 16,
-    backgroundColor: '#FFFFFF',
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 18,
-    color: '#111827',
-  },
-  placeholder: {
-    width: 44,
-  },
   // Section
   section: {
-    marginTop: 20,
+    marginTop: 8,
     paddingHorizontal: 20,
   },
   sectionTitle: {
@@ -307,6 +264,10 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontSize: 14,
     color: '#111827',
+    marginBottom: 0,
+  },
+  itemTitleNoMargin: {
+    marginBottom: 0,
   },
   itemSubtitle: {
     fontSize: 12,

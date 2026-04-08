@@ -7,8 +7,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
-import { useRouter } from 'expo-router';
-import BackIcon from '../assets/images/back.svg';
 import TrophyIcon from '../assets/images/trophy.svg';
 import EmptyStarIcon from '../assets/images/empty-star.svg';
 import CalendarIcon from '../assets/images/calendar.svg';
@@ -40,24 +38,6 @@ const certificates = [
 ];
 
 export default function CertificatesScreen() {
-  const router = useRouter();
-
-  const handleBack = () => {
-    router.back();
-  };
-
-  const renderHeader = () => (
-    <View style={styles.header}>
-      <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-        <BackIcon width={20} height={20} />
-      </TouchableOpacity>
-      <ThemedText style={styles.title} weight="bold">
-        My Certificates
-      </ThemedText>
-      <View style={styles.placeholder} />
-    </View>
-  );
-
   const renderStats = () => (
     <View style={styles.statsContainer}>
       <View style={styles.statBox}>
@@ -147,12 +127,11 @@ export default function CertificatesScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom']}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {renderHeader()}
         {renderStats()}
         <View style={styles.certificatesList}>
           {certificates.map(renderCertificateCard)}
@@ -170,32 +149,11 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 24,
   },
-  // Header
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 16,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 18,
-    color: '#111827',
-  },
-  placeholder: {
-    width: 44,
-  },
   // Stats
   statsContainer: {
     flexDirection: 'row',
     marginHorizontal: 20,
+    marginTop: 8,
     marginBottom: 24,
     backgroundColor: '#FFFFFF',
     borderRadius: 12,

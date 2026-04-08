@@ -108,7 +108,7 @@ export default function LessonDetailsScreen() {
           
           <TouchableOpacity style={styles.playButton}>
             <View style={styles.playButtonCircle}>
-              <PlayIcon width={24} height={24} />
+              <PlayIcon width={24} height={24} fill="#FFFFFF" />
             </View>
           </TouchableOpacity>
         </View>
