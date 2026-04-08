@@ -40,10 +40,11 @@ export default function RootLayout() {
     }
   }, [fontsLoaded, fontError]);
 
-  // Check onboarding status on mount and when segments change
+  // Check onboarding status on mount only
   useEffect(() => {
     checkOnboardingStatus();
-  }, [segments]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const handleRouting = async () => {
@@ -51,7 +52,8 @@ export default function RootLayout() {
         const isOnboardingRoute = segments[0] === 'onboarding';
         const isAuthRoute = segments[0] === '(auth)';
 
-        if (!hasCompletedOnboarding && !isOnboardingRoute) {
+        // Only redirect to onboarding if not completed and not already there, or going to auth/tabs
+        if (!hasCompletedOnboarding && !isOnboardingRoute && !isAuthRoute) {
           router.replace('/onboarding');
         }
       }

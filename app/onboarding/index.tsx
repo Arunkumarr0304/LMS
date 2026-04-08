@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingBottom: 40,
+    paddingBottom: 80,
     paddingHorizontal: 16,
   },
   skipText: {
