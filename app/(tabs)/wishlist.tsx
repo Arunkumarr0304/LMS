@@ -5,7 +5,6 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
@@ -122,17 +121,17 @@ export default function WishlistScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      {renderHeader()}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {renderHeader()}
         <View style={styles.coursesContainer}>
           {courses.map((course, index) => renderCourseCard(course, index))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -142,7 +141,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   scrollContent: {
-    paddingBottom: 24,
+    paddingBottom: 20,
   },
   // Header
   header: {

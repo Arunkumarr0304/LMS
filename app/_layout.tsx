@@ -94,6 +94,7 @@ export default function RootLayout() {
         <Stack.Screen name="payment-history" options={{ title: 'Payment History', headerTitleAlign: 'center' }} />
         <Stack.Screen name="help-center" options={{ title: 'Help Center', headerTitleAlign: 'center' }} />
         <Stack.Screen name="settings" options={{ title: 'Settings', headerTitleAlign: 'center' }} />
+        <Stack.Screen name="notifications" options={{ title: 'Notifications', headerTitleAlign: 'center' }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
       <StatusBar style="auto" />

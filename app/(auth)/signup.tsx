@@ -18,7 +18,6 @@ import Phone from '../../assets/images/phone.svg';
 
 export default function SignupScreen() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const [fullName, setFullName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
@@ -49,7 +48,6 @@ export default function SignupScreen() {
             {/* Logo Section */}
             <View style={styles.logoSection}>
               <Logo width={200} height={72} />
-              <ThemedText style={styles.tagline} weight="regular">Learn Skills. Grow Daily.</ThemedText>
             </View>
 
             {/* Sign Up Title Section */}
@@ -152,16 +150,16 @@ export default function SignupScreen() {
               <TouchableOpacity style={styles.createAccountButton} onPress={handleCreateAccount}>
                 <ThemedText style={styles.createAccountButtonText} weight="semiBold">Create account</ThemedText>
               </TouchableOpacity>
+
+              {/* Login Footer */}
+              <View style={styles.footer}>
+                <ThemedText style={styles.footerText} weight="regular">Already have an account? </ThemedText>
+                <TouchableOpacity onPress={() => router.push('/login')}>
+                  <ThemedText style={styles.loginText} weight="semiBold">Login</ThemedText>
+                </TouchableOpacity>
+              </View>
             </View>
           </ScrollView>
-
-          {/* Login Footer - Fixed at bottom */}
-          <View style={[styles.footer, { marginBottom: Math.max(insets.bottom, Platform.OS === 'android' ? 18 : 18) }]}>
-            <ThemedText style={styles.footerText} weight="regular">Already have an account? </ThemedText>
-            <TouchableOpacity onPress={() => router.push('/login')}>
-              <ThemedText style={styles.loginText} weight="semiBold">Login</ThemedText>
-            </TouchableOpacity>
-          </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
@@ -183,6 +181,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 24,
     paddingTop: 20,
+    paddingBottom: 24,
   },
   logoSection: {
     alignItems: 'center',
@@ -195,15 +194,18 @@ const styles = StyleSheet.create({
   },
   titleSection: {
     marginBottom: 24,
+    paddingTop: 8,
   },
   titleText: {
     fontSize: 24,
     color: '#1a1a1a',
     marginBottom: 4,
+    lineHeight: 32,
   },
   subtitleText: {
     fontSize: 14,
     color: '#666',
+    lineHeight: 20,
   },
   form: {
     gap: 12,
@@ -273,9 +275,8 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 18,
-    paddingBottom: 18,
+    marginTop: 20,
+    paddingBottom: 24,
   },
   footerText: {
     fontSize: 14,

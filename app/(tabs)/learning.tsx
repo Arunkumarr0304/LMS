@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
@@ -230,17 +229,17 @@ export default function LearningScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      {renderHeader()}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {renderHeader()}
         {renderSearchBar()}
         {renderCategories()}
         {renderMyLearning()}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -250,7 +249,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   scrollContent: {
-    paddingBottom: 24,
+    paddingBottom: 20,
   },
   // Header
   header: {

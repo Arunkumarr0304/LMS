@@ -2,7 +2,7 @@ import { StyleSheet, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Pl
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { ThemedText } from '@/components/themed-text';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Import Logo
 import { Image } from 'react-native';
@@ -19,7 +19,6 @@ import Email from '../../assets/images/email.svg';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const insets = useSafeAreaInsets();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -131,16 +130,16 @@ export default function LoginScreen() {
                   <Email width={24} height={24} />
                 </TouchableOpacity>
               </View>
+
+              {/* Sign Up Footer - Inside ScrollView */}
+              <View style={styles.footer}>
+                <ThemedText style={styles.footerText} weight="regular">Don't have an account? </ThemedText>
+                <TouchableOpacity onPress={() => router.push('/signup')}>
+                  <ThemedText style={styles.signupText} weight="semiBold">Sign up</ThemedText>
+                </TouchableOpacity>
+              </View>
             </View>
           </ScrollView>
-
-          {/* Sign Up Footer - Fixed at bottom */}
-          <View style={[styles.footer, { marginBottom: Math.max(insets.bottom, Platform.OS === 'android' ? 18 : 18) }]}>
-            <ThemedText style={styles.footerText} weight="regular">Don't have an account? </ThemedText>
-            <TouchableOpacity onPress={() => router.push('/signup')}>
-              <ThemedText style={styles.signupText} weight="semiBold">Sign up</ThemedText>
-            </TouchableOpacity>
-          </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
@@ -291,9 +290,8 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    paddingHorizontal: 24,
-    paddingTop: 18,
-    paddingBottom: 18,
+    marginTop: 20,
+    marginBottom: 30,
   },
   footerText: {
     fontSize: 14,

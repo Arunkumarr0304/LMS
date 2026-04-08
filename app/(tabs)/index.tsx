@@ -5,8 +5,6 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  FlatList,
-  Text,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
@@ -236,11 +234,6 @@ export default function HomeScreen() {
               <ThemedText style={styles.continueTitle} weight="semiBold" numberOfLines={1}>
                 {course.title}
               </ThemedText>
-              {course.subtitle && (
-                <ThemedText style={styles.continueSubtitle} weight="regular">
-                  {course.subtitle}
-                </ThemedText>
-              )}
               <ThemedText style={styles.continueInstructor} weight="regular">
                 {course.instructor}
               </ThemedText>
@@ -334,18 +327,18 @@ export default function HomeScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      {renderHeader()}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {renderHeader()}
         {renderSearchBar()}
         {renderCategories()}
         {renderContinueLearning()}
         {renderPopularCourses()}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -353,9 +346,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    paddingBottom: 0,
   },
   scrollContent: {
+    paddingBottom: 20,
   },
   // Header
   header: {
@@ -519,20 +512,15 @@ const styles = StyleSheet.create({
     color: '#111827',
     marginBottom: 2,
   },
-  continueSubtitle: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
   continueInstructor: {
     fontSize: 12,
     color: '#6B7280',
-    marginBottom: 4,
   },
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    marginBottom: 8,
+    marginTop: 2,
   },
   ratingText: {
     fontSize: 12,
@@ -542,8 +530,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginTop: 'auto',
-    paddingTop: 8,
+    marginTop: 6,
   },
   progressBar: {
     flex: 1,

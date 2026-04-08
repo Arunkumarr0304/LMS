@@ -5,7 +5,6 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
 import { useRouter } from 'expo-router';
 import BackIcon from '../../assets/images/back.svg';
@@ -129,12 +128,12 @@ export default function ProfileScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      {renderHeader()}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {renderHeader()}
         {renderProfileCard()}
         {renderStats()}
         {renderMenu()}
@@ -153,7 +152,7 @@ export default function ProfileScreen() {
           Version 1.0.0
         </ThemedText>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -163,7 +162,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   scrollContent: {
-    paddingBottom: 24,
+    paddingBottom: 20,
   },
   // Header
   header: {

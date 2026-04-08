@@ -9,8 +9,8 @@
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff",
-      "width": 244,
-      "height": 98
+      "width": 400,
+      "height": 160
     },
     "scheme": "",
     "userInterfaceStyle": "automatic",
