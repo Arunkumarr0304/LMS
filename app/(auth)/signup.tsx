@@ -1,6 +1,7 @@
 import { StyleSheet, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemedText } from '@/components/themed-text';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -27,8 +28,9 @@ export default function SignupScreen() {
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
   const [acceptedTerms, setAcceptedTerms] = useState<boolean>(false);
 
-  const handleCreateAccount = (): void => {
+  const handleCreateAccount = async (): Promise<void> => {
     console.log('Create account attempt:', { fullName, email, phoneNumber, password });
+    await AsyncStorage.setItem('hasCompletedOnboarding', 'true');
     router.replace('/(tabs)');
   };
 

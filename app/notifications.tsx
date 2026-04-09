@@ -2,9 +2,12 @@ import {
   StyleSheet,
   View,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/themed-text';
+import { useRouter } from 'expo-router';
+import BackIcon from '../assets/images/back.svg';
 import NotificationIcon4 from '../assets/images/notification-icon4.svg';
 import NotificationIcon5 from '../assets/images/notification-icon5.svg';
 import NotificationIcon6 from '../assets/images/notification-icon6.svg';
@@ -46,6 +49,12 @@ const notifications = [
 ];
 
 export default function NotificationsScreen() {
+  const router = useRouter();
+
+  const handleBackPress = () => {
+    router.back();
+  };
+
   const renderNotificationCard = (notification: typeof notifications[0]) => {
     const IconComponent = notification.icon;
     return (
@@ -73,16 +82,25 @@ export default function NotificationsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Header with Back Button */}
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
+          <BackIcon width={24} height={24} />
+        </TouchableOpacity>
+        <ThemedText style={styles.headerTitle} weight="semiBold">
+          Notifications
+        </ThemedText>
+        <View style={styles.headerRight} />
+      </View>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
         {/* Section Title */}
-        <View style={styles.sectionHeader}>
-          <ThemedText style={styles.sectionTitle} weight="semiBold">
-            All Notifications
-          </ThemedText>
-        </View>
+        <ThemedText style={styles.sectionTitle} weight="medium">
+          Transaction History
+        </ThemedText>
 
         {/* Notifications List */}
         <View style={styles.notificationsList}>
@@ -101,14 +119,36 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 24,
   },
-  // Section Header
-  sectionHeader: {
+  // Header
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
+  },
+  backButton: {
+    width: 44,
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerTitle: {
+    fontSize: 18,
+    color: '#111827',
+  },
+  headerRight: {
+    width: 44,
+  },
+  // Section Title
+  sectionTitle: {
+    fontSize: 14,
+    color: '#4D4D4D',
     paddingHorizontal: 20,
     marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    color: '#111827',
+    marginTop: 8,
   },
   // Notifications List
   notificationsList: {

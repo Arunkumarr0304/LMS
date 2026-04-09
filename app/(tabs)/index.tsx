@@ -32,8 +32,8 @@ const continueLearningCourses = [
   },
   {
     id: '2',
-    title: 'React Native -',
-    subtitle: 'John Doe',
+    title: 'React Native - Build Apps',
+    instructor: 'By John Doe',
     rating: 4.9,
     duration: '20h',
     progress: 45,
@@ -234,9 +234,11 @@ export default function HomeScreen() {
               <ThemedText style={styles.continueTitle} weight="semiBold" numberOfLines={1}>
                 {course.title}
               </ThemedText>
-              <ThemedText style={styles.continueInstructor} weight="regular">
-                {course.instructor}
-              </ThemedText>
+              {course.instructor && (
+                <ThemedText style={styles.continueInstructor} weight="regular">
+                  {course.instructor}
+                </ThemedText>
+              )}
               <View style={styles.ratingContainer}>
                 <StarIcon width={12} height={12} />
                 <ThemedText style={styles.ratingText} weight="medium">

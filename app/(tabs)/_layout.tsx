@@ -1,12 +1,13 @@
 import { Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CustomTabBar } from '@/components/custom-tab-bar';
 
 export default function TabLayout() {
   return (
     <GestureHandlerRootView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
       <SafeAreaView style={styles.container} edges={['top']}>
         <View style={styles.content}>
           <Stack screenOptions={{ headerShown: false }}>

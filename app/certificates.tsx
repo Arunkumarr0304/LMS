@@ -60,9 +60,6 @@ export default function CertificatesScreen() {
       <View style={styles.imageContainer}>
         <Image source={certificate.image} style={styles.certificateImage} />
         <View style={styles.checkmarkOverlay}>
-          <View style={styles.checkmarkCircle}>
-            <ThemedText style={styles.checkmark}>✓</ThemedText>
-          </View>
         </View>
       </View>
 

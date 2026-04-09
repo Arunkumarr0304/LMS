@@ -1,11 +1,11 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack, useRouter, useSegments } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFonts, Manrope_200ExtraLight, Manrope_300Light, Manrope_400Regular, Manrope_500Medium, Manrope_600SemiBold, Manrope_700Bold, Manrope_800ExtraBold } from '@expo-google-fonts/manrope';
 import * as SplashScreen from 'expo-splash-screen';
+import { View, ActivityIndicator } from 'react-native';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -34,33 +34,31 @@ export default function RootLayout() {
     Manrope_800ExtraBold,
   });
 
-  useEffect(() => {
-    if (fontsLoaded || fontError) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
-
-  // Check onboarding status on mount only
+  // Check onboarding status on mount
   useEffect(() => {
     checkOnboardingStatus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Handle routing after loading is done
   useEffect(() => {
-    const handleRouting = async () => {
-      if (!isLoading && hasCompletedOnboarding !== null) {
-        const isOnboardingRoute = segments[0] === 'onboarding';
-        const isAuthRoute = segments[0] === '(auth)';
+    const handleRouting = () => {
+      if (!isLoading && hasCompletedOnboarding !== null && (fontsLoaded || fontError)) {
+        const currentSegment = segments[0];
+        const isOnboardingRoute = currentSegment === 'onboarding';
+        const isAuthRoute = currentSegment === '(auth)';
 
-        // Only redirect to onboarding if not completed and not already there, or going to auth/tabs
+        // Redirect to onboarding only if not completed and not already on onboarding/auth
         if (!hasCompletedOnboarding && !isOnboardingRoute && !isAuthRoute) {
           router.replace('/onboarding');
         }
+
+        // Hide splash screen after routing decision
+        SplashScreen.hideAsync();
       }
     };
 
     handleRouting();
-  }, [isLoading, hasCompletedOnboarding, segments, router]);
+  }, [isLoading, hasCompletedOnboarding, segments, router, fontsLoaded, fontError]);
 
   const checkOnboardingStatus = async () => {
     try {
@@ -74,21 +72,25 @@ export default function RootLayout() {
     }
   };
 
-  // Don't render anything until fonts are loaded
-  if (!fontsLoaded && !fontError) {
-    return null;
+  // Show loading indicator while checking onboarding status OR loading fonts
+  if (isLoading || (!fontsLoaded && !fontError)) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff' }}>
+        <ActivityIndicator size="large" color="#4F46E5" />
+      </View>
+    );
   }
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="course-details" options={{ headerShown: false }} />
-        <Stack.Screen name="lesson-details" options={{ headerShown: false }} />
-        <Stack.Screen name="payment" options={{ headerShown: false }} />
-        <Stack.Screen name="payment-success" options={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="onboarding" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="course-details" />
+        <Stack.Screen name="lesson-details" />
+        <Stack.Screen name="payment" />
+        <Stack.Screen name="payment-success" />
         <Stack.Screen name="my-courses" options={{ title: 'My Courses', headerTitleAlign: 'center' }} />
         <Stack.Screen name="certificates" options={{ title: 'My Certificates', headerTitleAlign: 'center' }} />
         <Stack.Screen name="payment-history" options={{ title: 'Payment History', headerTitleAlign: 'center' }} />
@@ -97,7 +99,6 @@ export default function RootLayout() {
         <Stack.Screen name="notifications" options={{ title: 'Notifications', headerTitleAlign: 'center' }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
-      <StatusBar style="auto" />
     </ThemeProvider>
   );
 }

@@ -1,6 +1,7 @@
 import { StyleSheet, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemedText } from '@/components/themed-text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -24,8 +25,9 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [rememberMe, setRememberMe] = useState<boolean>(false);
 
-  const handleLogin = (): void => {
+  const handleLogin = async (): Promise<void> => {
     console.log('Login attempt:', { email, password });
+    await AsyncStorage.setItem('hasCompletedOnboarding', 'true');
     router.replace('/(tabs)');
   };
 
