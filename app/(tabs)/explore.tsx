@@ -21,6 +21,7 @@ import SeeArrowIcon from '../../assets/images/see-arrow.svg';
 const categories = ['All', 'Design', 'Programming', 'Marketing'];
 
 const recentSearchCourses = [
+
   {
     id: '1',
     title: 'Advanced Python Programming',
@@ -82,9 +83,13 @@ export default function ExploreScreen() {
     router.push(`/course-details?id=${course.id}&title=${encodeURIComponent(course.title)}&instructor=${encodeURIComponent(course.instructor)}&rating=${course.rating}&students=${course.students}&duration=${encodeURIComponent(course.duration)}&price=${course.price}` as any);
   };
 
+  const handleBackPress = () => {
+    router.back();
+  };
+
   const renderHeader = () => (
     <View style={styles.header}>
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
         <BackIcon width={20} height={20} />
       </TouchableOpacity>
       <ThemedText style={styles.title} weight="bold">

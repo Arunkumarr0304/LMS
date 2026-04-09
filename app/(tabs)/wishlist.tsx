@@ -52,7 +52,7 @@ export default function WishlistScreen() {
 
   const renderHeader = () => (
     <View style={styles.header}>
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <BackIcon width={20} height={20} />
       </TouchableOpacity>
       <ThemedText style={styles.title} weight="bold">

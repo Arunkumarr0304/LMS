@@ -33,10 +33,36 @@
           "image": "./assets/images/splash-icon.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
-          "imageWidth": 300,
+          "imageWidth": 250,
           "dark": {
             "image": "./assets/images/splash-icon.png",
-            "backgroundColor": "#000000"
+            "resizeMode": "contain",
+            "backgroundColor": "#000000",
+            "imageWidth": 250
+          },
+          "ios": {
+            "image": "./assets/images/splash-icon.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff",
+            "imageWidth": 250,
+            "dark": {
+              "image": "./assets/images/splash-icon.png",
+              "resizeMode": "contain",
+              "backgroundColor": "#000000",
+              "imageWidth": 250
+            }
+          },
+          "android": {
+            "image": "./assets/images/splash-icon.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff",
+            "imageWidth": 250,
+            "dark": {
+              "image": "./assets/images/splash-icon.png",
+              "resizeMode": "contain",
+              "backgroundColor": "#000000",
+              "imageWidth": 250
+            }
           }
         }
       ]

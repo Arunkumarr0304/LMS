@@ -27,7 +27,14 @@ export default function LoginScreen() {
 
   const handleLogin = async (): Promise<void> => {
     console.log('Login attempt:', { email, password });
+    
+    // Mark onboarding as completed
     await AsyncStorage.setItem('hasCompletedOnboarding', 'true');
+    
+    // Mark user as authenticated - CRITICAL for navigation
+    await AsyncStorage.setItem('isAuthenticated', 'true');
+    
+    // Navigate to main app
     router.replace('/(tabs)');
   };
 

@@ -22,6 +22,7 @@ export default function RootLayout() {
   const segments = useSegments();
   const [isLoading, setIsLoading] = useState(true);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   // Load Manrope fonts
   const [fontsLoaded, fontError] = useFonts({
@@ -34,39 +35,109 @@ export default function RootLayout() {
     Manrope_800ExtraBold,
   });
 
-  // Check onboarding status on mount
+  // Check status on mount - ONLY ONCE
   useEffect(() => {
-    checkOnboardingStatus();
+    checkAppStatus();
   }, []);
 
   // Handle routing after loading is done
   useEffect(() => {
-    const handleRouting = () => {
-      if (!isLoading && hasCompletedOnboarding !== null && (fontsLoaded || fontError)) {
+    // Wait for everything to be ready AND initial route to be determined
+    if (!isLoading && hasCompletedOnboarding !== null && isAuthenticated !== null && (fontsLoaded || fontError)) {
+      
+      // Give time for initial route to resolve, then check AsyncStorage FRESH
+      const timer = setTimeout(async () => {
+        // ALWAYS check AsyncStorage fresh - don't rely on stale state!
+        const [freshOnboarding, freshAuth] = await Promise.all([
+          AsyncStorage.getItem('hasCompletedOnboarding'),
+          AsyncStorage.getItem('isAuthenticated')
+        ]);
+        
+        const completedOnboarding = freshOnboarding === 'true';
+        const isUserAuthenticated = freshAuth === 'true';
+        
         const currentSegment = segments[0];
         const isOnboardingRoute = currentSegment === 'onboarding';
         const isAuthRoute = currentSegment === '(auth)';
+        const isTabsRoute = currentSegment === '(tabs)';
+        
+        // Define all valid app routes that authenticated users can access
+        const validAppRoutes = [
+          'course-details',
+          'lesson-details',
+          'payment',
+          'payment-success',
+          'my-courses',
+          'certificates',
+          'payment-history',
+          'help-center',
+          'settings',
+          'notifications',
+          'modal'
+        ];
+        const isValidAppRoute = validAppRoutes.includes(currentSegment);
 
-        // Redirect to onboarding only if not completed and not already on onboarding/auth
-        if (!hasCompletedOnboarding && !isOnboardingRoute && !isAuthRoute) {
-          router.replace('/onboarding');
+        // Update state if different (for UI consistency)
+        if (completedOnboarding !== hasCompletedOnboarding) {
+          setHasCompletedOnboarding(completedOnboarding);
+        }
+        if (isUserAuthenticated !== isAuthenticated) {
+          setIsAuthenticated(isUserAuthenticated);
+        }
+
+        console.log('Routing Check (FRESH):', { 
+          completedOnboarding, 
+          isUserAuthenticated, 
+          currentSegment,
+          isValidAppRoute,
+          segments
+        });
+
+        // PRIORITY 1: If NOT completed onboarding → MUST show onboarding first
+        if (!completedOnboarding) {
+          if (!isOnboardingRoute) {
+            console.log('→ Redirecting to onboarding');
+            router.replace('/onboarding');
+          }
+        }
+        // PRIORITY 2: Completed onboarding but NOT authenticated → show login
+        else if (!isUserAuthenticated) {
+          if (!isAuthRoute && !isOnboardingRoute) {
+            console.log('→ Redirecting to login');
+            router.replace('/(auth)/login');
+          }
+        }
+        // PRIORITY 3: Both completed AND authenticated → allow valid app routes or tabs
+        else {
+          // Allow: tabs routes, valid app pages (notifications, my-courses, etc.)
+          const isAllowedRoute = isTabsRoute || isValidAppRoute || isOnboardingRoute || isAuthRoute;
+          if (!isAllowedRoute) {
+            console.log('→ Redirecting to main app');
+            router.replace('/(tabs)');
+          }
         }
 
         // Hide splash screen after routing decision
         SplashScreen.hideAsync();
-      }
-    };
+      }, 100); // Small delay to let initial route settle
 
-    handleRouting();
-  }, [isLoading, hasCompletedOnboarding, segments, router, fontsLoaded, fontError]);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading, hasCompletedOnboarding, isAuthenticated, segments, router, fontsLoaded, fontError]);
 
-  const checkOnboardingStatus = async () => {
+  const checkAppStatus = async () => {
     try {
-      const value = await AsyncStorage.getItem('hasCompletedOnboarding');
-      setHasCompletedOnboarding(value === 'true');
+      const [onboardingValue, authValue] = await Promise.all([
+        AsyncStorage.getItem('hasCompletedOnboarding'),
+        AsyncStorage.getItem('isAuthenticated')
+      ]);
+      
+      setHasCompletedOnboarding(onboardingValue === 'true');
+      setIsAuthenticated(authValue === 'true');
     } catch (error) {
-      console.log('Error checking onboarding status:', error);
+      console.log('Error checking app status:', error);
       setHasCompletedOnboarding(false);
+      setIsAuthenticated(false);
     } finally {
       setIsLoading(false);
     }
@@ -91,12 +162,12 @@ export default function RootLayout() {
         <Stack.Screen name="lesson-details" />
         <Stack.Screen name="payment" />
         <Stack.Screen name="payment-success" />
-        <Stack.Screen name="my-courses" options={{ title: 'My Courses', headerTitleAlign: 'center' }} />
-        <Stack.Screen name="certificates" options={{ title: 'My Certificates', headerTitleAlign: 'center' }} />
-        <Stack.Screen name="payment-history" options={{ title: 'Payment History', headerTitleAlign: 'center' }} />
-        <Stack.Screen name="help-center" options={{ title: 'Help Center', headerTitleAlign: 'center' }} />
-        <Stack.Screen name="settings" options={{ title: 'Settings', headerTitleAlign: 'center' }} />
-        <Stack.Screen name="notifications" options={{ title: 'Notifications', headerTitleAlign: 'center' }} />
+        <Stack.Screen name="my-courses" options={{ headerShown: true, title: 'My Courses', headerTitleAlign: 'center' }} />
+        <Stack.Screen name="certificates" options={{ headerShown: true, title: 'My Certificates', headerTitleAlign: 'center' }} />
+        <Stack.Screen name="payment-history" options={{ headerShown: true, title: 'Payment History', headerTitleAlign: 'center' }} />
+        <Stack.Screen name="help-center" options={{ headerShown: true, title: 'Help Center', headerTitleAlign: 'center' }} />
+        <Stack.Screen name="settings" options={{ headerShown: true, title: 'Settings', headerTitleAlign: 'center' }} />
+        <Stack.Screen name="notifications" />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
     </ThemeProvider>
