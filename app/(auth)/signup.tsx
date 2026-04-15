@@ -16,6 +16,8 @@ import Mail from '../../assets/images/mail.svg';
 import Key from "../../assets/images/key.svg";
 import User from '../../assets/images/user.svg';
 import Phone from '../../assets/images/phone.svg';
+import UncheckedIcon from '../../assets/images/unchecked-icon.svg';
+import CheckedIcon from '../../assets/images/checked-icon.svg';
 
 export default function SignupScreen() {
   const router = useRouter();
@@ -141,9 +143,11 @@ export default function SignupScreen() {
 
               {/* Accept Terms Checkbox */}
               <TouchableOpacity style={styles.termsContainer} onPress={() => setAcceptedTerms(!acceptedTerms)}>
-                <View style={[styles.checkbox, acceptedTerms && styles.checkboxChecked]}>
-                  {acceptedTerms && <View style={styles.checkboxInner} />}
-                </View>
+                {acceptedTerms ? (
+                  <CheckedIcon width={18} height={18} style={styles.checkboxIcon} />
+                ) : (
+                  <UncheckedIcon width={18} height={18} style={styles.checkboxIcon} />
+                )}
                 <ThemedText style={styles.termsText} weight="regular">Accept terms & conditions</ThemedText>
               </TouchableOpacity>
 
@@ -238,25 +242,8 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 8,
   },
-  checkbox: {
-    width: 18,
-    height: 18,
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 4,
+  checkboxIcon: {
     marginRight: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkboxChecked: {
-    borderColor: '#5856D6',
-    backgroundColor: '#5856D6',
-  },
-  checkboxInner: {
-    width: 10,
-    height: 10,
-    backgroundColor: '#fff',
-    borderRadius: 2,
   },
   termsText: {
     fontSize: 14,

@@ -17,6 +17,8 @@ import Key from "../../assets/images/key.svg";
 import Google from "../../assets/images/google.svg";
 import Apple from '../../assets/images/apple.svg';
 import Email from '../../assets/images/email.svg';
+import UncheckedIcon from '../../assets/images/unchecked-icon.svg';
+import CheckedIcon from '../../assets/images/checked-icon.svg';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -103,9 +105,11 @@ export default function LoginScreen() {
               {/* Remember Me & Forgot Password */}
               <View style={styles.rememberForgotContainer}>
                 <TouchableOpacity style={styles.rememberContainer} onPress={() => setRememberMe(!rememberMe)}>
-                  <View style={[styles.checkbox, rememberMe && styles.checkboxChecked]}>
-                    {rememberMe && <View style={styles.checkboxInner} />}
-                  </View>
+                  {rememberMe ? (
+                    <CheckedIcon width={18} height={18} style={styles.checkboxIcon} />
+                  ) : (
+                    <UncheckedIcon width={18} height={18} style={styles.checkboxIcon} />
+                  )}
                   <ThemedText style={styles.rememberText} weight="regular">Remember me</ThemedText>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => router.push('/(auth)/verification')}>
@@ -224,25 +228,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  checkbox: {
-    width: 18,
-    height: 18,
-    borderWidth: 1,
-    borderColor: '#999',
-    borderRadius: 4,
+  checkboxIcon: {
     marginRight: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkboxChecked: {
-    borderColor: '#5856D6',
-    backgroundColor: '#5856D6',
-  },
-  checkboxInner: {
-    width: 10,
-    height: 10,
-    backgroundColor: '#fff',
-    borderRadius: 2,
   },
   rememberText: {
     fontSize: 14,
