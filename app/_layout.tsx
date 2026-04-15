@@ -85,41 +85,24 @@ export default function RootLayout() {
           setIsAuthenticated(isUserAuthenticated);
         }
 
-        console.log('Routing Check (FRESH):', { 
-          completedOnboarding, 
-          isUserAuthenticated, 
-          currentSegment,
-          isValidAppRoute,
-          segments
-        });
-
-        // PRIORITY 1: If NOT completed onboarding → MUST show onboarding first
         if (!completedOnboarding) {
           if (!isOnboardingRoute) {
-            console.log('→ Redirecting to onboarding');
             router.replace('/onboarding');
           }
         }
-        // PRIORITY 2: Completed onboarding but NOT authenticated → show login
         else if (!isUserAuthenticated) {
           if (!isAuthRoute && !isOnboardingRoute) {
-            console.log('→ Redirecting to login');
             router.replace('/(auth)/login');
           }
         }
-        // PRIORITY 3: Both completed AND authenticated → allow valid app routes or tabs
         else {
-          // Allow: tabs routes, valid app pages (notifications, my-courses, etc.)
           const isAllowedRoute = isTabsRoute || isValidAppRoute || isOnboardingRoute || isAuthRoute;
           if (!isAllowedRoute) {
-            console.log('→ Redirecting to main app');
             router.replace('/(tabs)');
           }
         }
-
-        // Hide splash screen after routing decision
         SplashScreen.hideAsync();
-      }, 100); // Small delay to let initial route settle
+      }, 100);
 
       return () => clearTimeout(timer);
     }
@@ -135,7 +118,6 @@ export default function RootLayout() {
       setHasCompletedOnboarding(onboardingValue === 'true');
       setIsAuthenticated(authValue === 'true');
     } catch (error) {
-      console.log('Error checking app status:', error);
       setHasCompletedOnboarding(false);
       setIsAuthenticated(false);
     } finally {

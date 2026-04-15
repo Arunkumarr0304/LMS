@@ -53,11 +53,11 @@ export default function LessonDetailsScreen() {
   };
 
   const handleMarkComplete = () => {
-    console.log('Marking lesson as complete:', lessonId);
+    
   };
 
   const handleNextLesson = () => {
-    console.log('Going to next lesson');
+   
   };
 
   const handleLessonPress = (lesson: typeof allLessons[0]) => {

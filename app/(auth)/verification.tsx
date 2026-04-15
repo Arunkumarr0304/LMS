@@ -48,8 +48,6 @@ export default function VerificationScreen() {
   };
 
   const handleVerify = () => {
-    const fullCode = code.join('');
-    console.log('Verification code:', fullCode);
     router.push('/(auth)/ResetPassword');
   };
 
@@ -59,7 +57,6 @@ export default function VerificationScreen() {
       setIsResendActive(false);
       setCode(['', '', '', '', '']);
       inputRefs.current[0]?.focus();
-      console.log('Resending code...');
     }
   };
 

@@ -22,7 +22,6 @@ export default function ResetPasswordScreen() {
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   const handleResetPassword = (): void => {
-    console.log('Reset password attempt:', { password, confirmPassword });
     router.push('/login');
   };
 

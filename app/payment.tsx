@@ -57,11 +57,11 @@ export default function PaymentScreen() {
   };
 
   const handleAddCard = () => {
-    console.log('Add card pressed');
+    
   };
 
   const handleApplyPromo = () => {
-    console.log('Apply promo code:', promoCode);
+  
   };
 
   const toggleCardDropdown = () => {

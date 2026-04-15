@@ -26,8 +26,6 @@ export default function LoginScreen() {
   const [rememberMe, setRememberMe] = useState<boolean>(false);
 
   const handleLogin = async (): Promise<void> => {
-    console.log('Login attempt:', { email, password });
-    
     // Mark onboarding as completed
     await AsyncStorage.setItem('hasCompletedOnboarding', 'true');
     
@@ -39,7 +37,7 @@ export default function LoginScreen() {
   };
 
   const handleSocialLogin = (provider: string): void => {
-    console.log('Social login:', provider);
+    // Social login handler
   };
 
   return (

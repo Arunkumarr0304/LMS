@@ -29,7 +29,6 @@ export default function SignupScreen() {
   const [acceptedTerms, setAcceptedTerms] = useState<boolean>(false);
 
   const handleCreateAccount = async (): Promise<void> => {
-    console.log('Create account attempt:', { fullName, email, phoneNumber, password });
     await AsyncStorage.setItem('hasCompletedOnboarding', 'true');
     router.replace('/(tabs)');
   };

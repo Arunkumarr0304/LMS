@@ -1,50 +1,174 @@
-# Welcome to your Expo app 👋
+# Learner - Course Learning App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern, feature-rich Learning Management System (LMS) mobile application built with React Native and Expo. This template provides a complete educational platform with course browsing, progress tracking, video lessons, certificates, and more.
 
-## Get started
+## Features
 
-1. Install dependencies
+- 📚 **Course Catalog**: Browse and search through various courses
+- 🎥 **Video Lessons**: Stream video content with progress tracking
+- 📊 **Progress Tracking**: Monitor your learning journey
+- 🏆 **Certificates**: Earn certificates upon course completion
+- 👤 **User Profile**: Manage your account and view statistics
+- ❤️ **Wishlist**: Save courses for later
+- 🔍 **Course Search**: Find courses by category or keyword
+- 💳 **Payment Integration**: Secure course purchase flow
+- 🎨 **Modern UI**: Beautiful, responsive design with smooth animations
+
+## Tech Stack
+
+- **Framework**: React Native with Expo
+- **Navigation**: Expo Router (file-based routing)
+- **Styling**: React Native StyleSheet
+- **Icons**: Custom SVG icons
+- **Storage**: AsyncStorage for local data persistence
+- **Fonts**: Manrope font family
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ installed
+- Expo CLI installed globally (`npm install -g expo-cli`)
+- Android Studio (for Android development)
+- Xcode (for iOS development, macOS only)
+
+### Installation
+
+1. Clone the repository or extract the template
+2. Install dependencies:
 
    ```bash
    npm install
    ```
 
-2. Start the app
+3. Start the development server:
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. Run on your preferred platform:
+   - Press `a` for Android emulator
+   - Press `i` for iOS simulator
+   - Scan QR code with Expo Go app on your physical device
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Building for Production
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Android Release Build
 
-## Get a fresh project
+1. Follow the instructions in `README_SIGNING.md` to set up your release keystore
+2. Build the release APK:
 
-When you're ready, run:
+   ```bash
+   cd android
+   ./gradlew assembleRelease
+   ```
 
-```bash
-npm run reset-project
+3. Or build Android App Bundle (AAB) for Play Store:
+
+   ```bash
+   cd android
+   ./gradlew bundleRelease
+   ```
+
+### iOS Release Build
+
+1. Open `ios/YourApp.xcworkspace` in Xcode
+2. Configure signing with your Apple Developer account
+3. Select "Any iOS Device" as the target
+4. Go to Product → Archive
+5. Upload to App Store Connect
+
+## Project Structure
+
+```
+├── app/                    # Main application code (Expo Router)
+│   ├── (auth)/            # Authentication routes
+│   ├── (tabs)/            # Main tab navigation
+│   ├── onboarding/        # Onboarding screens
+│   └── ...                # Other screens
+├── components/            # Reusable UI components
+├── constants/            # App constants (theme, fonts, etc.)
+├── assets/               # Images, fonts, icons
+├── android/              # Android native project
+└── ios/                  # iOS native project (if ejected)
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Configuration
 
-## Learn more
+### Environment Variables
 
-To learn more about developing your project with Expo, look at the following resources:
+Create a `.env` file in the root directory for environment-specific configurations:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```env
+# Add your API endpoints, keys, etc.
+API_URL=https://your-api-endpoint.com
+```
 
-## Join the community
+### Android Permissions
 
-Join our community of developers creating universal apps.
+The app requires the following permissions:
+- `INTERNET`: For network requests
+- `READ_EXTERNAL_STORAGE`: For accessing media files
+- `WRITE_EXTERNAL_STORAGE`: For downloading content (Android 10 and below)
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Security Best Practices Implemented
+
+- ✅ All console.log statements have been removed from production code
+- ✅ Database backup disabled in AndroidManifest.xml
+- ✅ Data extraction rules configured to prevent cloud backup
+- ✅ ProGuard rules configured for code obfuscation
+- ✅ Release signing configuration documented
+
+## Customization
+
+### Changing App Name
+
+1. Update `app.json`:
+   ```json
+   {
+     "name": "Your App Name",
+     "slug": "your-app-slug"
+   }
+   ```
+
+2. Update Android app name in `android/app/src/main/res/values/strings.xml`
+
+3. Update iOS app name in `ios/YourApp/Info.plist`
+
+### Changing Theme Colors
+
+Edit `constants/theme.ts` to customize:
+- Primary colors
+- Typography
+- Spacing
+- Border radius
+- Shadows
+
+### Adding New Screens
+
+1. Create a new file in the `app/` directory
+2. Use the file-based routing convention (e.g., `app/new-screen.tsx`)
+3. The route will be automatically available at `/new-screen`
+
+## Dependencies
+
+See `package.json` for the full list of dependencies. Key dependencies include:
+
+- expo
+- react-native
+- @react-navigation/native
+- @react-native-async-storage/async-storage
+- react-native-svg
+
+## Support
+
+For issues, questions, or customization requests, please contact the template author.
+
+## License
+
+This template is licensed for use on CodeCanyon. Please refer to your purchase license for usage terms.
+
+---
+
+**Note**: This template provides a UI foundation. Backend integration (API endpoints, authentication backend, payment processing) needs to be implemented according to your specific requirements.
