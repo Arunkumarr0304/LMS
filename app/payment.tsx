@@ -57,11 +57,11 @@ export default function PaymentScreen() {
   };
 
   const handleAddCard = () => {
-    
+    // Add card handler
   };
 
   const handleApplyPromo = () => {
-  
+    // Apply promo code handler
   };
 
   const toggleCardDropdown = () => {
@@ -573,6 +573,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     paddingTop: 12,
+    paddingBottom: 24,
   },
   confirmButton: {
     backgroundColor: '#4F46E5',

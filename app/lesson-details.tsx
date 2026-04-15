@@ -53,11 +53,11 @@ export default function LessonDetailsScreen() {
   };
 
   const handleMarkComplete = () => {
-    
+    // Mark lesson as complete
   };
 
   const handleNextLesson = () => {
-   
+    // Navigate to next lesson
   };
 
   const handleLessonPress = (lesson: typeof allLessons[0]) => {
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
-    paddingBottom: 40,
+    paddingBottom: 100,
   },
   // Video Section
   videoContainer: {
